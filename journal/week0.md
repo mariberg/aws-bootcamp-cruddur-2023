@@ -27,3 +27,9 @@ The budget was created through AWS CLI on Gitpod based on the budget and budget 
 ## Homework challenges
 
 ### Architectual diagram of the CI/CD pipeline
+
+As an additional challenged I attempted to create an architectual diagram of the CI/CD pipeline according to my current understanding. I will be adding the missing part of the bootcamp progresses.
+
+![cicd_pipeline](assets/CICD-diagram.png)
+
+[Link to Ludic chart CICD pipeline diagram](https://lucid.app/lucidchart/3a0ffc37-6c56-406a-aec8-087c4a7aaf8f/edit?invitationId=inv_62646d85-2424-48d6-a3e4-e97a79e2aa2e)
