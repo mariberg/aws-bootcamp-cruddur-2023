@@ -23,7 +23,7 @@ We are using openAPI, which we can import to automatically create the AWS API ga
 
 We added a new endpoint to the openapi-3.0.yml -file.
 
-[openApi](assets/openapi_notifications.jpg)
+![openApi](assets/openapi_notifications.png)
 
 
 ### A Flask Backend Endpoint for Notifications
@@ -35,7 +35,7 @@ We added a new route on the app.py file and created a new service called notific
 
 For React, we first added a new route for notifications on App.js -file. We added a file called NotificationsFeedPage.js to pages. We could reuse the code from HomeFeedPage.js as it works very similarly, only the data is different, which meant we simply changed the endpoint for backend.
 
-[notifications React](assets/notifications.jpg)
+![notifications React](assets/notifications.png)
 
 ### Run DynamoDB Local Container and ensure it works
 
@@ -45,13 +45,13 @@ We started by adding DynamoDB local to the docker-compose.yml -file. Now running
 
 We added Postgres to the docker-compose.yml -file. We also added a volume for Postgres at the botton of the docker-compose.yml. Now running ``docker compose up``run also a container for Postgres. We used database connection extension for creating a new connection:
 
-[postgres_connection](assets/postgres_connection.png)
+![postgres_connection](assets/postgres_connection.png)
 
 After the connection had been established, we connected to psql client with command ``psql -Upostgres --host localhost``. We were now in side a postgres container and could start entering postgres commands.
 
 We had in total four containers running:
 
-[containers](assets/containers_running.jpg)
+![containers](assets/containers_running.png)
 
 ## Homework challenges
 
