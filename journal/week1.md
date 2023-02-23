@@ -23,21 +23,38 @@ We are using openAPI, which we can import to automatically create the AWS API ga
 
 We added a new endpoint to the openapi-3.0.yml -file.
 
-ADD SCREENSHOT HERE.
+[openApi](assets/openapi_notifications.jpg)
 
 
 ### A Flask Backend Endpoint for Notifications
 
 We added a new route on the app.py file and created a new service called notifications_activities.py.
 
-SCREENSHOTS?
 
 ### React Page for Notifications
 
 For React, we first added a new route for notifications on App.js -file. We added a file called NotificationsFeedPage.js to pages. We could reuse the code from HomeFeedPage.js as it works very similarly, only the data is different, which meant we simply changed the endpoint for backend.
 
+[notifications React](assets/notifications.jpg)
+
 ### Run DynamoDB Local Container and ensure it works
+
+We started by adding DynamoDB local to the docker-compose.yml -file. Now running ``docker compose up``run also a container for DynamoDB. We made sure that DynamoDB works by creating a table and items.
 
 ## Run Postgres Container and ensure it works
 
+We added Postgres to the docker-compose.yml -file. We also added a volume for Postgres at the botton of the docker-compose.yml. Now running ``docker compose up``run also a container for Postgres. We used database connection extension for creating a new connection:
+
+[postgres_connection](assets/postgres_connection.png)
+
+After the connection had been established, we connected to psql client with command ``psql -Upostgres --host localhost``. We were now in side a postgres container and could start entering postgres commands.
+
+We had in total four containers running:
+
+[containers](assets/containers_running.jpg)
+
 ## Homework challenges
+
+### Run the same containers on my local machines
+
+### Launch an EC2 instance that has Docker installed, and pull a container to demonstrate you can run your own Docker processes
