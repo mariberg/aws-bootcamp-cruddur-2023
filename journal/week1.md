@@ -64,7 +64,7 @@ I implemented health checks for frontend and backend in the Docker-compose file.
 
 ### Run the same containers on my local machine
 
-As an additional challenge, I ran the same containers on my local machine. This was easy to implement, as I had already installed the Docker desktop. Only some changes to URL's in the Docker-compose -file were needed.  
+As an additional challenge, I ran the same containers on my local machine. This was straightforward to implement, as I had already Docker desktop installed. Only some changes to URL's in the Docker-compose -file were needed.  
 
 ![containers_local](assets/containers_local.png)
 
