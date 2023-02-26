@@ -41,7 +41,7 @@ For React, we first added a new route for notifications on App.js -file. We adde
 
 We started by adding DynamoDB local to the docker-compose.yml -file. Now running ``docker compose up``run also a container for DynamoDB. We made sure that DynamoDB works by creating a table and items.
 
-## Run Postgres Container and ensure it works
+### Run Postgres Container and ensure it works
 
 We added Postgres to the docker-compose.yml -file. We also added a volume for Postgres at the botton of the docker-compose.yml. Now running ``docker compose up``run also a container for Postgres. We used database connection extension for creating a new connection:
 
@@ -55,6 +55,20 @@ We had in total four containers running:
 
 ## Homework challenges
 
-### Run the same containers on my local machines
+### Implement a healthcheck in the Docker-compose file
 
-### Launch an EC2 instance that has Docker installed, and pull a container to demonstrate you can run your own Docker processes
+I implemented healthchecks for frontend and backend in the Docker-compose file. For backend I first had to install curl as that was need to run the healthcheck. This was done in the backend Dockerfile. With `docker ps` -command I could see that both containers had healthy status.
+
+![healthchecks](assets/healthchecks.png)
+
+
+### Run the same containers on my local machine
+
+As an additional challenge I ran the same containers on my local machine. This was easy to implement, as I had already installed Docker desktop. Only some changes to url's in the Docker-compose -file were needed.  
+
+![containers_local](assets/containers_local.png)
+
+![backend_localhost](assets/backend_localhost.png)
+
+![frontend_localhost](assets/frontend_localhost.png)
+
