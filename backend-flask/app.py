@@ -38,7 +38,7 @@ console_handler = logging.StreamHandler()
 cw_handler = watchtower.CloudWatchLogHandler(log_group='cruddur')
 LOGGER.addHandler(console_handler)
 LOGGER.addHandler(cw_handler)
-LOGGER.info("test log")
+#LOGGER.info("test log")
 
 
 # Honeycomb -----
