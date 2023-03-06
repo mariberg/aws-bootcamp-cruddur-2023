@@ -75,7 +75,7 @@ We started by installing Watchtower, importing and configuring Cloudwatch to app
 
 ## Homework challenges
 
-As a challenge this week I implemented another Honeycomb customer span. I implemented it in 'notifications' service in a similar way we implemented the span in home activities. It creates a span when we return mock data for notifications:
+As a challenge this week I implemented another Honeycomb custom span. I implemented it in 'notifications' service in a similar way we implemented the span in home activities. It creates a span when we return mock data for notifications:
 
 ![notifications span](assets/notifications_span.png)
 
