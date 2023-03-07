@@ -5,6 +5,8 @@ import React from "react";
 // [TODO] Authenication
 import Cookies from 'js-cookie'
 
+import { Auth } from 'aws-amplify';
+
 export default function ProfileInfo(props) {
   const [popped, setPopped] = React.useState(false);
 
@@ -12,6 +14,16 @@ export default function ProfileInfo(props) {
     setPopped(!popped)
   }
 
+  const signOut = async () => {
+    try {
+        await Auth.signOut({ global: true }); //forces all sessions to close
+        window.location.href = "/"
+    } catch (error) {
+        console.log('error signing out: ', error);
+    }
+  }
+
+  /* Original code utilizing cookies:
   const signOut = async () => {
     console.log('signOut')
     // [TODO] Authenication
@@ -23,6 +35,7 @@ export default function ProfileInfo(props) {
     //Cookies.remove('user.confirmation_code')
     window.location.href = "/"
   }
+  */
 
   const classes = () => {
     let classes = ["profile-info-wrapper"];
