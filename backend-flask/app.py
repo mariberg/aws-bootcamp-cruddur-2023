@@ -3,6 +3,7 @@ from flask import request
 from flask_cors import CORS, cross_origin
 import os
 
+
 from services.home_activities import *
 from services.notifications_activities import *
 from services.user_activities import *
@@ -13,6 +14,8 @@ from services.message_groups import *
 from services.messages import *
 from services.create_message import *
 from services.show_activity import *
+
+from lib.cognito_token_verification import CognitoTokenVerification
 
 # Honeycomb ---------
 from opentelemetry import trace
@@ -60,6 +63,13 @@ xray_url = os.getenv("AWS_XRAY_URL")
 xray_recorder.configure(service='backend-flask', dynamic_naming=xray_url)
 
 app = Flask(__name__)
+
+cognito_token_verification = CognitoTokenVerification(
+  user_pool_id=os.getenv("AWS_COGNITO_USER_POOL_ID"),
+  user_pool_client_id=os.getenv("AWS_COGNITO_USER_POOL_CLIENT_ID"),
+  region= es.getenv("AWS_DEFAULT_REGION")
+)
+
 # X-ray --------
 XRayMiddleware(app, xray_recorder)
 
@@ -73,8 +83,8 @@ origins = [frontend, backend]
 cors = CORS(
   app, 
   resources={r"/api/*": {"origins": origins}},
-  expose_headers="location,link",
-  allow_headers="content-type,if-modified-since",
+  headers=['Content-Type', 'Authorization'], 
+  expose_headers='Authorization',
   methods="OPTIONS,GET,HEAD,POST"
 )
 
@@ -146,8 +156,11 @@ def data_create_message():
 
 @app.route("/api/activities/home", methods=['GET'])
 @xray_recorder.capture('activities_home')
+@aws_auth.authentication_required
 def data_home():
   data = HomeActivities.run(logger=LOGGER)
+  claims = aws_auth.claims
+  app.logger.debug(claims)
   return data, 200
 
 @app.route("/api/activities/notifications", methods=['GET'])
