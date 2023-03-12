@@ -67,7 +67,7 @@ app = Flask(__name__)
 cognito_jwt_token = CognitoJwtToken(
   user_pool_id=os.getenv("AWS_COGNITO_USER_POOL_ID"),
   user_pool_client_id=os.getenv("AWS_COGNITO_USER_POOL_CLIENT_ID"),
-  region= es.getenv("AWS_DEFAULT_REGION")
+  region= os.getenv("AWS_DEFAULT_REGION")
 )
 
 # X-ray --------
@@ -156,12 +156,10 @@ def data_create_message():
 
 @app.route("/api/activities/home", methods=['GET'])
 @xray_recorder.capture('activities_home')
-@aws_auth.authentication_required
 def data_home():
-  app.logger.debug(request.headers)
-  access_token = CognitoJwtToken.extract_access_token(request.headers)
+  access_token = extract_access_token(request.headers)
   try:
-      claims = cognito_jwt_token.token_service.verify(access_token)
+      claims = cognito_jwt_token.verify(access_token)
       app.logger.debug("authenticated")
       app.logger.debug(claims)
       app.logger.debug(claims['username'])
