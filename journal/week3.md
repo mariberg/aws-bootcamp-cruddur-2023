@@ -6,7 +6,7 @@ The authentication for the application is going to be implemented with Amazon Co
 
 The first step was to set up a user pool on the AWS console. To limit costs, it was better not to enable MFA and also to allow email recovery by email only (instead of SMS). There were several options that were not very clear from the beginning and had to be modified afterwards.
 
-![user pool](user_pool.png)
+![user pool](assets/user_pool.png)
 
 After the user pool was created, it was time to move to Gitpod. There used to be a Cognito library for Javascript, but that library was integrated into AWS Amplify, which means you now need to install the whole Amplify library in order to use Cognito. 
 
@@ -27,7 +27,7 @@ The implementation was started by importing Auth from aws-amplify and adding cod
 
 In order to test the sign-in functionality, a new user had to be created in the AWS console. The problem was that this user was stuck in  'force change password' status, as the application didn't yet have the functionality to deal with this:
 
-![change password](change_password.png)
+![change password](assets/change_password.png)
 
 The password status could be changed to 'confirmed' by running a CLI command that manually confirmed the password. 
 
@@ -45,7 +45,7 @@ At this point the application gave an error code 'Username cannot be of email fo
 
 Now it was possible to create a new user, receive a confirmation code via email and then confirm the user with the confirmation code directly in the UI. The user was now displayed as 'confirmed' in the AWS console:
 
-![new user](new_user.png)
+![new user](assets/new_user.png)
 
 
 ## Implement Custom Recovery Page
@@ -57,7 +57,7 @@ Similar steps were still needed for the recovery page. The first step was import
 
 When an API call is made, also the token needs to be sent with the request. The below code was added to ``Homefeedpage`` to grab the token from localStorage and pass it to backend:
 
-``
+```python
  const loadData = async () => {
     try {
       const backend_url = `${process.env.REACT_APP_BACKEND_URL}/api/activities/home`
@@ -67,7 +67,7 @@ When an API call is made, also the token needs to be sent with the request. The 
         },
         method: "GET"
       });
-``
+```
 
 This first produced a CORS error, which was resolved by updating CORS headers in ``app.py`` to include Authorization.
 
@@ -81,7 +81,7 @@ Due to the above restrictions, the best way was to use only some of the code fro
 
 There are several different approaches to verifying JWTs and it is not always straightforward which approach to choose. ChatGPT suggested the following solution:
 
-![chatGPT](chatGPT.png)
+![chatGPT](assets/chatGPT.png)
 
 This code is a lot shorter than the one that was used for Cruddur. However, it doesn’t look like it is done purely on the front end only. Rather it seems it hits the Cognito API to get the user data. This is an extra step you don't want to do unless absolutely necessary. For this reason, the code is not the best choice in this particular situation.
 
