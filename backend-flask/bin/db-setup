@@ -1,4 +1,5 @@
 #! /usr/bin/bash
+
 -e # stop if it fails at any point
 
 CYAN='\033[1;36m'
