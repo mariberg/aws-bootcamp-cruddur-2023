@@ -40,7 +40,6 @@ class Db:
     no_color = '\033[0m'
     print(f'{cyan} SQL STATEMENT-[{title}]------{no_color}')
     print(sql)
-  # we want to commit data such as an insert
   def query_commit(self,sql,params={}):
     self.print_sql('commit with returning',sql)
 

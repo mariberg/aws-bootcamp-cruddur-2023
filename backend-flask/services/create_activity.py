@@ -4,7 +4,6 @@ from datetime import datetime, timedelta, timezone
 from lib.db import db
 
 class CreateActivity:
-  def validations():
   def run(message, user_handle, ttl):
     model = {
       'errors': None,
@@ -46,7 +45,11 @@ class CreateActivity:
         'message': message
       }   
     else:
-      self.create_activity()
+      expires_at = (now + ttl_offset)
+      uuid = CreateActivity.create_activity(user_handle, message, expires_at)
+      
+      object_json = CreateActivity.query_object_activity(uuid)
+      
       model['data'] = {
         'uuid': uuid.uuid4(),
         'display_name': 'Andrew Brown',
@@ -56,21 +59,21 @@ class CreateActivity:
         'expires_at': (now + ttl_offset).isoformat()
       }
     return model
-  def create_activity(user_uuid, message, expires_at):
-    sql = f"""
-    INSERT INTO (
-      user_uuid,
-      message,
-      expires_at
-    )
-    VALUES (
-      %s,
-      %s,
-      %s
-    ) RETURNING uuid;
-    """
-    uuid = db.query_commit_returning_id(sql, user_uuid, message, expires_at)
+  def create_activity(handle, message, expires_at):
+    sql = db.template('activities', 'create')
+    uuid = db.query_commit(sql,{ 
+      'handle': handle, 
+      'message': message, 
+      'expires_at': expires_at
+      })
+  def query_object_activity(uuid):
+    sql = db.template('activities', 'object')
+    uuid = db.query_object(sql,{ 
+      'uuid': uuid
+      })
     
-    query_commit(sql)
-  
-  def query_object_activity():
+  def query_object_activity(uuid):
+    sql = db.template('activities', 'object')
+    return db.query_object_json(sql, {
+      'uuid': uuid
+    })
