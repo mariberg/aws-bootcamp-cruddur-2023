@@ -25,7 +25,7 @@ aws rds create-db-instance \
   --performance-insights-retention-period 7 \
   --no-deletion-protection
   ``
- 
+ <br/><br/>
  It is important to note, that many of the selected options are not security best practices, as it was important to keep the costs down during this project and stay within the free tier whenever possible. In production, you would want to use for example backups, deletion protection and AWS secret manager to store passwords. In production, the database should also not be made publicly accessible, although during this project the security group of the subnet is going to keep us protected even when the URL is exposed. 
  
  The new database was now visible in the AWS console:
@@ -34,7 +34,7 @@ aws rds create-db-instance \
 
 This instance can be temporarily stopped through the AWS console for 7 days to save costs.
 
-!!!!!!!!!!!! Programmatically update a security group rule
+<br/><br/>
 
 ## Create a schema SQL file by hand
 
@@ -42,11 +42,15 @@ A new folder called ``db`` was created for the backend and within it file ``sche
 
 ``psql -Upostgres cruddur < db/schemal.sql -h localhost -U postgres``
 
+<br/><br/>
+
 ## Work with UUIDs and PSQL extensions
 
 Extension UUID is used to obscure the user ids. Using chronological numbers is usually not a good idea as this would allow anyone to easily check how many registered users you have. This command was added in the beginning of ``schema.sql``:
 
 ``CREATE EXTENSION IF NOT EXISTS "uuid-ossp";``
+
+<br/><br/>
 
 ## Bash scripting for common database actions
 
@@ -64,14 +68,17 @@ An if-statement was also added to schema-load in order to run the command either
 
 Finally file ``db-setup`` was created to automatically run all bash commands, so that you don't have to manually run them every time the project is re-started. This is something that naturally wouldn't be done in production.
 
+<br/><br/>
+
 ## Install Postgres Driver in Backend Application
 
-Now that the tables had been created, it was possible to start writing SQL commands. However, for that, a driver for PostgreSQL called ``psycopg`` had to be installed. Several things were added to ``requiremtns.txt`` -file:
+Now that the tables had been created, it was possible to start writing SQL commands. However, for that, a driver for PostgreSQL called ``psycopg`` had to be installed. Several things were added to ``requirements.txt`` -file:
 - connection pool: the idea is to re-use connections instead of creating new ones every time
 - using Lambda would create a new connection every time it is run, which would require using an RDS proxy in order to use a connection pool. However, when ECS is used and containers are run only for a certain amount of time, it is possible to take advantage of connecting pooling without needing an RDS proxy.
 - a new file called ``db.py`` was created to create a new connection. The connection ULR was also added to docker-compose.
 - imported the pool in ``homeactivities`` and added code to use the pool connection. The originally used mock data was removed as it wouldn't be needed anymore.
 
+<br/><br/>
 
 ## Operate common SQL commands
 
@@ -79,7 +86,7 @@ The first SQL query was now working:
 
 ![sql query](assets/sql_query.png)
 
-It has now been updated to an actual SQL query instead of the wildcard. It has a join to the users table:
+It was then updated to an actual SQL query instead of the wildcard. It has a join to the users table:
 
 ![join query](assets/join_query.png)
 
@@ -87,6 +94,7 @@ Now also the username is visible:
 
 ![query with username](assets/query_with_username.png)
 
+<br/><br/>
 
 ## Connect Gitpod to RDS Instance
 
@@ -105,6 +113,8 @@ To run this command automatically, a new file called ``rds-update-sg-rule`` was 
 ![gitpod yml](assets/gitpod_yml.png)
 
 Now after swapping the connection URL to production URL in docker-compose, Gitpod was connected to the AWS RDS database. Schema could be created by running ``./bin/db-schme-load prod``, however, no data could be seen at the front end as the production database is literally empty. 
+
+<br/><br/>
 
 ## Implement a Lambda and Cognito Trigger to insert the user into the database
 
@@ -126,6 +136,8 @@ Later while refactoring the code, it was noticed that the Lambda code was create
 to:
 
 ![Lambda modified](assets/Lambda_modified.png)
+
+<br/><br/>
 
 ## Create new activities with a database insert
 
