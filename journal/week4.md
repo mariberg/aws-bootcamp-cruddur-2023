@@ -4,7 +4,7 @@
 
 The RDS instance was provisioned through the AWS CLI with this command:
 
-``
+```cli
 aws rds create-db-instance \
   --db-instance-identifier cruddur-db-instance \
   --db-instance-class db.t3.micro \
@@ -24,8 +24,8 @@ aws rds create-db-instance \
   --enable-performance-insights \
   --performance-insights-retention-period 7 \
   --no-deletion-protection
-  ``
- <br/><br/>
+``` 
+ 
  It is important to note, that many of the selected options are not security best practices, as it was important to keep the costs down during this project and stay within the free tier whenever possible. In production, you would want to use for example backups, deletion protection and AWS secret manager to store passwords. In production, the database should also not be made publicly accessible, although during this project the security group of the subnet is going to keep us protected even when the URL is exposed. 
  
  The new database was now visible in the AWS console:
@@ -44,7 +44,7 @@ A new folder called ``db`` was created for the backend and within it file ``sche
 
 <br/><br/>
 
-## Work with UUIDs and PSQL extensions
+## Work with UUIDs
 
 Extension UUID is used to obscure the user ids. Using chronological numbers is usually not a good idea as this would allow anyone to easily check how many registered users you have. This command was added in the beginning of ``schema.sql``:
 
@@ -82,7 +82,7 @@ Now that the tables had been created, it was possible to start writing SQL comma
 
 ## Operate common SQL commands
 
-The first SQL query was now working:
+The first SQL query was now working locally:
 
 ![sql query](assets/sql_query.png)
 
@@ -108,9 +108,9 @@ aws ec2 modify-security-group-rules \
 --security-group-rules "SecurityGroupRuleId=$DB_SG_RULE_ID,SecurityGroupRule={Description=GITPOD,IpProtocol=tcp,FromPort=5432,ToPort=5432,CidrIpv4=$GITPOD_IP/32}"
 ``
 
-To run this command automatically, a new file called ``rds-update-sg-rule`` was created. The following command in ``.gitpod.yml`` now saves the IP address and runs the rule every time Gitpod is re-launched:
+To run this command automatically, a new file called ``rds-update-sg-rule`` was created. The following command in .gitpod.yml now saves the IP address and runs the rule every time Gitpod is re-launched:
  
-![gitpod yml](assets/gitpod_yml.png)
+![gitpod_yml](assets/gitpod_yml.png)
 
 Now after swapping the connection URL to production URL in docker-compose, Gitpod was connected to the AWS RDS database. Schema could be created by running ``./bin/db-schme-load prod``, however, no data could be seen at the front end as the production database is literally empty. 
 
