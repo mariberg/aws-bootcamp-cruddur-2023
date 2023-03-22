@@ -92,9 +92,35 @@ Now also the username is visible:
 
 In order to connect Gitpod to RDS instance, we had to create a connection URL that contained the database endpoint URL taken from AWS console and save that as an environment variable. The security group had to also be updated as the default settings allow inbound traffic only from the same security group. An inbound rule had to be created for the Gitpod IP address. A handy way of finding the Gitpod IP address was running command ``curl ifconfig.me``
 
-It was possible to update the security group directly in AWS console, however the issue with Gitpod is that the IP address is going to change every time Gitpod is re-launched. 
+It was possible to update the security group directly in AWS console, however the issue with Gitpod is that the IP address is going to change every time Gitpod is re-launched. In order to faciliate this the security group ID and SG rule group ID had to be copied from the AWS console and saved as environment variables. The following CLI can be run to update the IP address for the security group rule:
+
+``
+aws ec2 modify-security-group-rules \
+--group-id $DB_SG_ID \
+--security-group-rules "SecurityGroupRuleId=$DB_SG_RULE_ID,SecurityGroupRule={Description=GITPOD,IpProtocol=tcp,FromPort=5432,ToPort=5432,CidrIpv4=$GITPOD_IP/32}"
+``
+
+To run this command automatically, a new file called ``rds-update-sg-rule`` was created. The following command in ``.gitpod.yml`` now saves the IP address and runs the rule everytime Gitpod is re-launched:
+ 
+![gitpod yml](assets/gitpod_yml.png)
+
+Now after swapping the connection URL to producting URL in docker-compose, Gitpod was connected to AWS RDS database. Schema could be created by running ``./bin/db-schme-load prod``, however no data could be seen at the frontend as the production database is literally empty. 
 
 ## Create Congito Trigger to insert user into database
+
+In order to test the production database, a Lambda function is needed to help. It will probably be very similar to a Postgres driver that will be used later in the project. 
+- this Lambda function is used only for development
+- it was created manually in AWS console
+- code for Lambda was saved in ``cruddur-post-confirmation.py``
+- environment variable that was needed for Lambda: Postgres URL
+- a Lambda layer was added - psycopg2 python postgresql client library
+- added to Cognito a Lambda trigger
+- Lambda also needed a VPC to work. And for VPC a new permission policy was needed:
+
+![permission policy](assets/permission_policy.png)
+
+
+
 ## Create new activities with a database insert
 
 -- Check where these belong?
