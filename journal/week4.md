@@ -106,7 +106,7 @@ To run this command automatically, a new file called ``rds-update-sg-rule`` was 
 
 Now after swapping the connection URL to producting URL in docker-compose, Gitpod was connected to AWS RDS database. Schema could be created by running ``./bin/db-schme-load prod``, however no data could be seen at the frontend as the production database is literally empty. 
 
-## Create Congito Trigger to insert user into database
+## Implement a Lambda and Cognito Trigger to insert user into database
 
 In order to test the production database, a Lambda function is needed to help. It will probably be very similar to a Postgres driver that will be used later in the project. 
 - this Lambda function is used only for development
@@ -119,16 +119,25 @@ In order to test the production database, a Lambda function is needed to help. I
 
 ![permission policy](assets/permission_policy.png)
 
+Later while refactoring code, it was noticed that the Lambda code was created in a way that allows SQL injection. In order the prevent that, the code was changed from:
 
+![Lambda original](assets/lambda_original.png)
+
+to:
+
+![Lambda modified](assets/Lambda_modified.png)
 
 ## Create new activities with a database insert
 
--- Check where these belong?
+A new endpoint needed to be added in order to write messages in the Cruddur app. Some SQL was acced to ``create_activity.py`` similarly as in ``home_activities``. Some times was spent refactoring code in order to make it more easily readable and manageable:
+
+- moved pool creationg to db.py
+- wreapped everything into a class Db so that the whole class could simply be imported to ``create_activity``.
+
+During debugging, it was noted that the ``create_activity.py`` was difficult to debug as it contained the SQL query. A decition was made to place all SQL queries in their own file in order to make it easier to manage. The SQL folder was created with three files: ``create.sql``, ``home.sql`` and ``object.sql``. The ``create_activity`` file hadd now only this instead of the whole SQL query:
+
+![create activity](assets/create_activity.png)
+
+In order for this to work, als oa new function called ``template`` was need in ``db.py``:
 
 
-
-
-## Implement a postgres client for python using a connection pool
-## Implement a Lambda that runs in a VPC and commits code to RDS
-## Work with PSQL json functions to directly return json from the database
-## Correctly sanitize parameters passed to SQL to execute
