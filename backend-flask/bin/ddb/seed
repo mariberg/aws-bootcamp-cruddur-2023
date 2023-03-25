@@ -236,15 +236,15 @@ for i in range(len(lines)):
   else:
     print(lines[i])
     raise 'invalid line'
-    created_at = (now + timedelta(minutes=i)).isoformat()
+  created_at = (now + timedelta(minutes=i)).isoformat()
     
-    create_message(
-      client=dbb,
-      message_group_uuid= message_group_uuid,
-      created_at=created_at,
-      message=message,
-      my_user_uuid=users[key]['uuid'],
-      my_user_display_name=users[key]['display_name'],
-      my_user_handle=users[key]['handle']
+  create_message(
+    client=ddb,
+    message_group_uuid= message_group_uuid,
+    created_at=created_at,
+    message=message,
+    my_user_uuid=users[key]['uuid'],
+    my_user_display_name=users[key]['display_name'],
+    my_user_handle=users[key]['handle']
     )
 

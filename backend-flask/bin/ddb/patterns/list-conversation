@@ -3,6 +3,12 @@
 import boto3
 import sys
 import json
+import os
+
+current_path = os.path.dirname(os.path.abspath(__file__))
+parent_path = os.path.abspath(os.path.join(current_path, '..', '..', '..'))
+sys.path.append(parent_path)
+from lib.db import db
 
 attrs = {
   'endpoint_url': 'http://localhost:8000'
@@ -15,15 +21,29 @@ if len(sys.argv) == 2:
 dynamodb = boto3.client('dynamodb',**attrs)
 table_name = 'cruddur-messages'
 
-# hardcode here the code uuid of your user
-my_user_uuid = "1506fa16-d775-4808-9f46-456661029af2"
+# this function get's the current user id as new one is created every time we re-launch db
+def get_my_user_uuid():
+  sql = """
+    SELECT 
+      users.uuid
+    FROM users
+    WHERE
+      users.handle =%(handle)s
+  """
+  uuid = db.query_value(sql,{
+    'handle':  'andrewbrown'
+  })
+  return uuid
+my_user_uuid = get_my_user_uuid()
+print("my uuid")
+print(my_user_uuid)
 
 # define the query parameters
 query_params = {
   'TableName': table_name,
-  'KeyConditionExpression': 'pk = :pkey',
+  'KeyConditionExpression': 'pk = :pk',
   'ExpressionAttributeValues': {
-    ':pkey': {'S': f"GRP#{brown_user_uuid}"}
+    ':pk': {'S': f"GRP#{my_user_uuid}"}
   },
   'ReturnConsumedCapacity': 'TOTAL'
 }

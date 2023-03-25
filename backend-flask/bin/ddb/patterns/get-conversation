@@ -27,9 +27,9 @@ query_params = {
   'KeyConditionExpression': 'pk = :pk AND begins_with(sk,:year)',
   #'KeyConditionExpression': 'pk = :pk AND sk BETWEEN :start_date AND :end_date',
   'ExpressionAttributeValues': {
-    ':year': {'S': '2023' },
-  #  ':start-date': { 'S': "2023-01-01T00:00:00.000000+00:00" },
-  #  ':end-date': { 'S': "2023-03-19T23:59:59.999999+00:00" },
+     ':year': {'S': '2023' },
+   # ":start_date": { "S": "2023-03-01T00:00:00.000000+00:00" },
+   # ":end_date": { "S": "2023-03-25T23:59:59.999999+00:00" },
     ':pk': {'S': f"MSG#{message_group_uuid}"},
     
   },
@@ -56,4 +56,4 @@ for item in reversed_array:
   timestamp     = item['sk']['S']
   dt_object = datetime.datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%S.%f%z')
   formatted_datetime = dt_object.strftime('%Y-%m-%d %I:%M %p')
-  print(f'{sender_handle: <16}{formatted_datetime: <22}{message[:40]}...')
+  print(f'{sender_handle: <16}{formatted_datetime: <22}{message[:40]}...') # these numbers just add spaces
