@@ -9,7 +9,6 @@ import ActivityFeed from '../components/ActivityFeed';
 import ActivityForm from '../components/ActivityForm';
 import ReplyForm from '../components/ReplyForm';
 
-import Cookies from 'js-cookie'
 
 export default function HomeFeedPage() {
   const [activities, setActivities] = React.useState([]);

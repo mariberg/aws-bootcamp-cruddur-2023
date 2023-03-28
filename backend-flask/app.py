@@ -121,16 +121,29 @@ def rollbar_test():
 
 @app.route("/api/message_groups", methods=['GET'])
 def data_message_groups():
-  user_handle  = 'andrewbrown'
-  model = MessageGroups.run(user_handle=user_handle)
-  if model['errors'] is not None:
-    return model['errors'], 422
-  else:
-    return model['data'], 200
+  def data_home():
+    access_token = extract_access_token(request.headers)
+    try:
+        claims = cognito_jwt_token.verify(access_token)
+        app.logger.debug("authenticated")
+        app.logger.debug(claims)
+        cognito_user_id = claims['sub']
+        model = MessageGroups.run(cognito_user_id=cognito_user_id)
+        if model['errors'] is not None:
+          return model['errors'], 422
+        else:
+          return model['data'], 200
+    except TokenVerifyError as e:
+        app.logger.debug(e)
+        app.logger.debug("unauthenticated")
+        data = HomeActivities.run()
+    return {}, 401
+  
+  
 
 @app.route("/api/messages/@<string:handle>", methods=['GET'])
 def data_messages(handle):
-  user_sender_handle = 'andrewbrown'
+  user_sender_handle = 'Marik'
   user_receiver_handle = request.args.get('user_reciever_handle')
 
   model = Messages.run(user_sender_handle=user_sender_handle, user_receiver_handle=user_receiver_handle)
@@ -143,7 +156,7 @@ def data_messages(handle):
 @app.route("/api/messages", methods=['POST','OPTIONS'])
 @cross_origin()
 def data_create_message():
-  user_sender_handle = 'andrewbrown'
+  user_sender_handle = 'Marik'
   user_receiver_handle = request.json['user_receiver_handle']
   message = request.json['message']
 
@@ -216,7 +229,7 @@ def data_show_activity(activity_uuid):
 @app.route("/api/activities/<string:activity_uuid>/reply", methods=['POST','OPTIONS'])
 @cross_origin()
 def data_activities_reply(activity_uuid):
-  user_handle  = 'andrewbrown'
+  user_handle  = 'Marik'
   message = request.json['message']
   model = CreateReply.run(message, user_handle, activity_uuid)
   if model['errors'] is not None:
