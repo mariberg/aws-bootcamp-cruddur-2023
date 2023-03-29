@@ -121,23 +121,20 @@ def rollbar_test():
 
 @app.route("/api/message_groups", methods=['GET'])
 def data_message_groups():
-  def data_home():
-    access_token = extract_access_token(request.headers)
-    try:
-        claims = cognito_jwt_token.verify(access_token)
-        app.logger.debug("authenticated")
-        app.logger.debug(claims)
-        cognito_user_id = claims['sub']
-        model = MessageGroups.run(cognito_user_id=cognito_user_id)
-        if model['errors'] is not None:
-          return model['errors'], 422
-        else:
-          return model['data'], 200
-    except TokenVerifyError as e:
-        app.logger.debug(e)
-        app.logger.debug("unauthenticated")
-        data = HomeActivities.run()
-    return {}, 401
+  access_token = extract_access_token(request.headers)
+  try:
+      claims = cognito_jwt_token.verify(access_token)
+      cognito_user_id = claims['sub']
+      model = MessageGroups.run(cognito_user_id=cognito_user_id)
+      if model['errors'] is not None:
+        return model['errors'], 422
+      else:
+        return model['data'], 200
+  except TokenVerifyError as e:
+      app.logger.debug(e)
+      app.logger.debug("unauthenticated")
+      data = HomeActivities.run()
+  return {}, 401
   
   
 
