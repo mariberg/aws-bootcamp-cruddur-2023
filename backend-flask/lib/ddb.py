@@ -20,7 +20,6 @@ class Ddb:
     query_params = {
       'TableName': table_name,
       'KeyConditionExpression': 'pk = :pk AND begins_with(sk,:year)',
-      ':year': {'S': '2023'},
       'ScanIndexForward': False,
       'Limit': 20,
       'ExpressionAttributeValues': {
@@ -34,6 +33,7 @@ class Ddb:
     # query the table
     response = client.query(**query_params)
     items = response['Items']
+    
     
     results = []
     for item in items:
