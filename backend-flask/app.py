@@ -136,7 +136,6 @@ def data_message_groups():
   return {}, 401
    
 
-# should this @ be removed?
 @app.route("/api/messages/@<string:message_group_uuid>", methods=['GET'])
 def data_messages(message_group_uuid):
   
@@ -198,7 +197,7 @@ def data_create_message():
   except TokenVerifyError as e:
     app.logger.debug(e)
     app.logger.debug("unauthenticated")
-    return data, 200
+    return {}, 401
 
 @app.route("/api/activities/home", methods=['GET'])
 @xray_recorder.capture('activities_home')
