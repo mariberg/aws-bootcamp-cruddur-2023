@@ -136,7 +136,7 @@ def data_message_groups():
   return {}, 401
    
 
-@app.route("/api/messages/@<string:message_group_uuid>", methods=['GET'])
+@app.route("/api/messages/<string:message_group_uuid>", methods=['GET'])
 def data_messages(message_group_uuid):
   
   access_token = extract_access_token(request.headers)
