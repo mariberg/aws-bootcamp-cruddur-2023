@@ -48,24 +48,170 @@ After this script was working, also a function called data_message_groups in app
 
 ## 	Implementing (Pattern B) listing message groups
 
-ist_message_groups function is quite similar to the list-conversations we created earlier. The only different is that we don’t simply dump json, but we iterate through the items and do something to them 
+The first change was made to message_groups.py. it originally returned mock data, but now it returns actual data from DynamoDB:
 
+```
+class MessageGroups:
+  def run(cognito_user_id):
+    model = {
+      'errors': None,
+      'data': None
+    }
+    
+    sql = db.template('users','uuid_from_cognito_user_id')
+    my_user_uuid = db.query_value(sql, {
+      'cognito_user_id': cognito_user_id
+      })
+    
+    print(f"UUID: {my_user_uuid}")
+    
+    ddb = Ddb.client()
+    data = Ddb.list_message_groups(ddb,my_user_uuid)
+    print("list_message_groups")
+    print(data)
+    
+    model['data'] = data
+    return model
+```
+
+The ``list_message_groups`` function is quite similar to the list-conversations script that was created earlier. The only different is that it doesn't simply dump json, but iterates through the items and does something to them.
+
+At this point also some changes were needed at the frontend. As many pages didn't have any access token requirement, this had to be corrected. The following code was added to messageGroupPage, messageGroupsPage and MessageForm:
+
+```
+const res = await fetch(backend_url, {
+        headers : {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`
+        },
+        method: "GET"
+      });
+```
+
+## Moving checkAuth function into it's own file
+
+The checkAuth function was originally created in pages that required it, but it was more purposeful to abstract it into a more generic function, that several pages could use. This function was created in lib-folder. Manually created checkAuth functions had to be removed from MessageGroupPage and MessagesGroupPage. The checkAuth function was then imported from the new file. It will need to added later for other pages as well.
 
 
 ## Implementing (pattern A) listing messages in message group
 
-
-
 The partition key for this pattern is messageGroup_uuid as that is the most straightforward way to access messages in a certain conversation.
 
+The implementation was started by changing the function ``data_messages`` in ``app.py`` from using uuid instead of handle. Soe code was added to ``messages.py`` to display the messages. The application now displayed message_groups on the left and messaged on the right:
 
-
-
+![messages](/assets/messages.png)
 
 
 
 ## Implement (Pattern C) Creating a Message for an existing Message Group into Application
 
-## Implement (Pattern D) Creating a Message for a new Message Group into Application
+The first step was to modify ``MessageForm.js`` at the frontend, which is used for sending messages. Code was added for two scenarios. If a user is starting a brand new conversation, there won’t be any message_group_uuid, which means a handle is used. If a handle is present, a brand new message group is created, otherwise the message is added to an existing message group:
 
-## Implement (Pattern E) Updating a Message Group using DynamoDB Streams
+```
+if (params.handle) {
+        json.handle = params.handle
+      } else {
+        json.message_group_uuid = params.message_group_uuid
+      }
+```
+
+A new page for params.handle will need to added at some point.
+
+At the backend the function ``data_create_message`` in ``app.py`` had to be modified. As the application is not using hardcoded data anymore, it was changed to use message_group_ids and cognito_user_ids.  An if-statement was added for two options, either creating a message to create a brand new message or to push a message to an existing message group (updating the message group).
+
+Additionally ``create_message.py`` has to now have two modes:
+
+```
+if (mode == "update"):
+      
+......
+
+if (mode == "create"):
+
+.....
+```
+
+A new function ``create_message`` was added to ``ddb.py`` to insert the message into DynamoDB.
+
+Created file create_message_users.sql for SQL script to get the user id’s from RDS to add to the messages. 
+
+
+## Implementing (pattern D) creating a message for a new message group
+
+To implement a new conversation, a new URL is used. In app.js:
+
+```
+{
+    path: "/messages/new/:handle",
+    element: <MessageGroupNewPage />
+  },
+```
+
+A file for the new page was then created. 
+
+Created a new service called ``users_short.py`` and imported it to ``app.py`` and create a new route for it in ``app.py``. Added also new SQL query to short.sql:
+
+```
+SELECT
+    users.uuid,
+    users.handle,
+    users.display_name
+FROM public.users
+WHERE
+    users.handle = %(handle)s
+```
+
+Added to frontend components ``messageGroupNewItem.js`` which is a very stripped down version of ``messageGroupitem.js``. 
+
+Also ``messageGroupFeed.js`` had to be updated to import messageGroupNewItem and code was added there to now conditionally have an option if this is a completely new item.
+
+Now when navigating to our the local url /messages/new/otherUser there is  the option to start creating new message to the otherUser:
+
+![new Message](/assets/newMessage.png)
+
+Next the function ``create_message_group`` was added to ``ddb.py``. This was a complicated function to create and it does the following:
+
+- generates a message group uuid
+- sets a message group from my perspective
+- sets a message group from other user’s perspective
+- creates the message we need to have
+- batches data structure into batch write
+
+
+## Implementing (pattern E) updating a message group using DynamoDB Streams
+
+DynamoDB stream is used to update the message group when a new message is created. Message groups have last_message_at as a sort key, so this obviously needs to be updated every time a new message is created to a message group. Now was the time to move from using a local DynamoDB table to production. A database was created in product by using the command for schema-load script: ``./bin/ddb/schema-load prod``. The database was now in the AWS console and the DynamoDB stream could be manually turned on in the console. The stream uses a Gateway endpoint, which provides access to DynamoDB among a few other services. There is no additional cost to this type of VPC endpoint. This endpoint was also created in AWS console and it was linked to the existing VPC and route table. 
+
+Next step was to manually create a new Python Lambda function called cruddur-messaging-stream. As stream captures all events and the Lambda code will select that it wants to take action only on events starting with 'MSG' (messages instead of message groups).  The function then has a database query, which returns two message groups that have this message and it will then delete them and create new ones instead with an updated sort key (the created_at of the last message as the last_reply_at). A it's not possible to update the sk, you have to delete it and recreate it. The more correct way would be to wrap this in a transaction, but this is difficult to implement. 
+
+However, for the query to work so that the two message groups can be returned, a secondary index is needed. This is because the partition key of the message group is user uuid, which means we are not able to make a query based on message group uuid unless making a scan, which would not be cost-effective. The global secondary index was added to the schema:
+
+```
+ GlobalSecondaryIndexes= [{
+    'IndexName':'message-group-sk-index',
+    'KeySchema':[{
+      'AttributeName': 'message_group_uuid',
+      'KeyType': 'HASH'
+    },{
+      'AttributeName': 'sk',
+      'KeyType': 'RANGE'
+    }],
+    'Projection': {
+      'ProjectionType': 'ALL'
+    },
+    'ProvisionedThroughput': {
+      'ReadCapacityUnits': 5,
+      'WriteCapacityUnits': 5
+    },
+  }],
+```
+
+This basically creates a clone of your primary table using the message group uuid as partition key, but the two tables are kept in sync. This GSI allows for querying the table based on the 'message_group_uuid' attribute, in addition to the primary key attributes 'pk' and 'sk'. Now it is possible to easily access all of the message groups when the sk needs to be updated. 
+
+Now the creation of new message will be captured by DynamoDB stream, which triggers Lambda function that will use the GSI to query all message groups where the message group uuid matches the partition key of the message. It will then replace the sk (last_reply_at) with the sk value (created_at) of the new message. These two values are now matching:
+
+![message event](/assets/message_event.png)
+
+![sk](/assets/sk.PNG)
+
+
+
