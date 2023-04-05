@@ -4,8 +4,10 @@
 
 This application uses simple table design, which makes the data modelling quite challenging. It is crucial to have your data mapped or you will end up with something that doesn't either work or becomes very expensive. To make it as cost effective as possible, it is important to choose such a design that as much a possible of the data you need is easily available, without using GSIs (global secondary index). When starting designing the database model, the first step is to list the different access patterns. For this application there are five initial access patterns, although more might be needed to be added (such as changing a username):
 
-- Showing a single conversation
+- Showing a single conversation:
+  Partition key: messageGroup_uuid and sort key: created_at
 - A list of conversations
+  Partition key: user_uuid and sort key: last_reply_at
 - Creating a message
 - Adding a new message to an existing message groups
 - Update a message group by using DynamoDB streams
@@ -19,7 +21,7 @@ This script loads your schema to DynamoDB. At the beginning of the script there 
 
 The seed file for DynamoDB is written in Python and has the option to be used for either development or production. In order to create the seed file, a function in SQL is needed to get the user uuid from RDS. Once the uuid is obtained, the seed file can be used to populate the DynamoDB tables. 
 
-The seed script has two functions, create_message_group and create_message. The function called create_message is adding a message to DynamoDB and using ‘my user’ details obtained in the above mentioned SQL query. Table name has been hardcoded to the query as there is only one table.  Function create_message_group is used to create a new message group. This function is called twice as there needs to be two message groups, one from the perspective of each user. 
+The seed script has two functions, create_message_group and create_message. The function called create_message is adding a message to DynamoDB and using "my user" details obtained in the above mentioned SQL query. Table name has been hardcoded to the query as there is only one table.  Function create_message_group is used to create a new message group. This function is called twice as there needs to be two message groups, one from the perspective of each user. 
 
 The seed script also has a hardcoded conversation as mockdata to populate the message group. Seeding data like this will be done only for development and for production it would be implemented differently as write operations can end up being expensive.
 
@@ -209,7 +211,7 @@ This basically creates a clone of your primary table using the message group uui
 
 Now the creation of new message will be captured by DynamoDB stream, which triggers Lambda function that will use the GSI to query all message groups where the message group uuid matches the partition key of the message. It will then replace the sk (last_reply_at) with the sk value (created_at) of the new message. These two values are now matching:
 
-![message event](assets/message_event.png)
+![message event](assets/message_event.PNG)
 
 ![sk](assets/sk.PNG)
 
