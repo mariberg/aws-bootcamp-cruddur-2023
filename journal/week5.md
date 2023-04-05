@@ -166,7 +166,7 @@ Also ``messageGroupFeed.js`` had to be updated to import messageGroupNewItem and
 
 Now when navigating to our the local url /messages/new/otherUser there is  the option to start creating new message to the otherUser:
 
-![new Message](/assets/newMessage.png)
+![new Message](assets/newMessage.png)
 
 Next the function ``create_message_group`` was added to ``ddb.py``. This was a complicated function to create and it does the following:
 
@@ -209,9 +209,9 @@ This basically creates a clone of your primary table using the message group uui
 
 Now the creation of new message will be captured by DynamoDB stream, which triggers Lambda function that will use the GSI to query all message groups where the message group uuid matches the partition key of the message. It will then replace the sk (last_reply_at) with the sk value (created_at) of the new message. These two values are now matching:
 
-![message event](/assets/message_event.png)
+![message event](assets/message_event.png)
 
-![sk](/assets/sk.PNG)
+![sk](assets/sk.PNG)
 
 
 
