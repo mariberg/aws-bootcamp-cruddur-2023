@@ -7,10 +7,12 @@ This application uses a simple table design, which makes the data modelling quit
 - Showing a single conversation:
   Partition key: messageGroup_uuid and sort key: created_at
 - A list of conversations
-  Partition key: user_uuid and sort key: last_reply_at
+  Partition key: user_uuid and sort key: last_message_at
 - Creating a message
 - Adding a new message to an existing message groups
 - Update a message group by using DynamoDB streams
+
+I have covered the data modeling in more detail in my blog: [blog](https://blog.marikabergman.com/aws-cloud-project-bootcamp-dynamodb)
 
 ## 	Implement schema load script
 
@@ -176,9 +178,9 @@ Next the function ``create_message_group`` was added to ``ddb.py``. This was a c
 
 ## Implementing (pattern E) updating a message group using DynamoDB Streams
 
-The DynamoDB stream is used to update the message group when a new message is created. Message groups have last_reply_at as a sort key, so this obviously needs to be updated every time a new message is created to a message group. Now was the time to move from using a local DynamoDB table to production. A database was created in production by using the command for schema-load script: ``./bin/ddb/schema-load prod``. The database was now in the AWS console and the DynamoDB stream could be manually turned on in the console. The stream uses a Gateway endpoint, which provides access to DynamoDB among a few other services. There is no additional cost to this type of VPC endpoint. This endpoint was also created in the AWS console and it was linked to the existing VPC and route table. 
+The DynamoDB stream is used to update the message group when a new message is created. Message groups have last_message_at as a sort key, so this obviously needs to be updated every time a new message is created to a message group. Now was the time to move from using a local DynamoDB table to production. A database was created in production by using the command for schema-load script: ``./bin/ddb/schema-load prod``. The database was now in the AWS console and the DynamoDB stream could be manually turned on in the console. The stream uses a Gateway endpoint, which provides access to DynamoDB among a few other services. There is no additional cost to this type of VPC endpoint. This endpoint was also created in the AWS console and it was linked to the existing VPC and route table. 
 
-Next step was to manually create a new Python Lambda function called cruddur-messaging-stream. As stream captures all events, the Lambda code will select that it wants to take action only on events starting with 'MSG' (messages instead of message groups).  The function then does a database query, which returns two message groups that have this message and it will then delete the sort keys and insert them with updated values (the created_at of the last message as the last_reply_at). As it's not possible to update the sk, you have to delete it and recreate it. The more correct way would be to wrap this in a transaction, but this is difficult to implement.
+Next step was to manually create a new Python Lambda function called cruddur-messaging-stream. As stream captures all events, the Lambda code will select that it wants to take action only on events starting with 'MSG' (messages instead of message groups).  The function then does a database query, which returns two message groups that have this message and it will then delete the sort keys and insert them with updated values (the created_at of the last message as the last_message_at). As it's not possible to update the sk, you have to delete it and recreate it. The more correct way would be to wrap this in a transaction, but this is difficult to implement.
 
 However, for the query to work so that the two message groups can be returned, a secondary index is needed. This is because the partition key of the message group is user_uuid, which means we are not able to make a query based on message_group_uuid unless making a scan, which would not be cost-effective. The global secondary index was added to the schema:
 
@@ -204,7 +206,7 @@ However, for the query to work so that the two message groups can be returned, a
 
 This basically creates a clone of your primary table using the message_group_uuid as partition key, but the two tables are kept in sync. This GSI allows for querying the table based on the message_group_uuid attribute, in addition to the primary key attributes 'pk' and 'sk'. Now it is possible to easily access all of the message groups when the sk needs to be updated. 
 
-Now the creation of new message will be captured by the DynamoDB stream, which triggers the Lambda function that will use the GSI to query all message groups where the message group uuid matches the partition key of the message. It will then replace the sk (last_reply_at) with the sk value (created_at) of the new message. These two values are now matching:
+Now the creation of new message will be captured by the DynamoDB stream, which triggers the Lambda function that will use the GSI to query all message groups where the message group uuid matches the partition key of the message. It will then replace the sk (last_message_at) with the sk value (created_at) of the new message. These two values are now matching:
 
 ![message event](assets/message_event.PNG)
 
