@@ -5,7 +5,7 @@
 This application uses a simple table design, which makes the data modelling quite challenging. It is crucial to have your data mapped or you will end up with something that doesn't either work or becomes very expensive. To make it as cost-effective as possible, it is important to choose such a design that enables as much as possible of the data you need to be easily available, without using GSIs (global secondary index). When starting to design the database model, the first step is to list the different access patterns. For this application there are five initial access patterns, although more might be needed to be added (such as changing a username):
 
 - Showing a single conversation:
-  Partition key: messageGroup_uuid and sort key: created_at
+  Partition key: message_group_uuid and sort key: created_at
 - A list of conversations
   Partition key: user_uuid and sort key: last_message_at
 - Creating a message
@@ -76,7 +76,7 @@ class MessageGroups:
 
 The ``list_message_groups`` function is quite similar to the list-conversations script that was created earlier. The only difference is that it doesn't simply dump json, but iterates through the items and does something to them.
 
-At this point also some changes were needed at the frontend. As many pages didn't have any access token requirement, this had to be corrected. The following code was added to ``messageGroupPage``, ``messageGroupsPage`` and ``MessageForm``:
+At this point also some changes were needed at the frontend. As many pages didn't have any access token requirement, this had to be corrected. The following code was added to ``Page``, ``messageGroupsPage`` and ``MessageForm``:
 
 ```
 const res = await fetch(backend_url, {
