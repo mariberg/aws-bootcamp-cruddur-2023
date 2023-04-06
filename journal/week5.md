@@ -12,7 +12,7 @@ This application uses a simple table design, which makes the data modelling quit
 - Adding a new message to an existing message groups
 - Update a message group by using DynamoDB streams
 
-I have covered the data modeling in more detail in my blog: [blog](https://blog.marikabergman.com/aws-cloud-project-bootcamp-dynamodb)
+I have covered the data modeling in more detail in my [blog](https://blog.marikabergman.com/aws-cloud-project-bootcamp-dynamodb)
 
 ## 	Implement schema load script
 
