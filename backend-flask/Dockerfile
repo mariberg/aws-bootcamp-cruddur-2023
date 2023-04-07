@@ -1,4 +1,4 @@
-FROM python:3.10-slim-buster
+FROM 557443467949.dkr.ecr.eu-west-2.amazonaws.com/cruddur-python:3.10-slim-buster
 
 RUN apt-get update \
  && apt-get install -y curl
@@ -22,7 +22,7 @@ COPY . .
 
 # Set environment variables (Env vars)
 # Inside container and will remain set when the container is running
-ENV FLASK_ENV=development
+ENV FLASK_DEBUG=1
 
 EXPOSE ${PORT}
 
