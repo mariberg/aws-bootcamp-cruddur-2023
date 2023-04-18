@@ -44,8 +44,8 @@
           {"name": "OTEL_EXPORTER_OTLP_ENDPOINT", "value": "https://api.honeycomb.io"},
           {"name": "AWS_COGNITO_USER_POOL_ID", "value": "eu-west-2_ZisYUEbiC"},
           {"name": "AWS_COGNITO_USER_POOL_CLIENT_ID", "value": "7alujng107fjbb97p4m7liabs9"},
-          {"name": "FRONTEND_URL", "value": "cloudproject.online"},
-          {"name": "BACKEND_URL", "value": "api.cloudproject.online"},
+          {"name": "FRONTEND_URL", "value": "https://cloudproject.online"},
+          {"name": "BACKEND_URL", "value": "https://api.cloudproject.online"},
           {"name": "AWS_DEFAULT_REGION", "value": "eu-west-2"}
         ],
         "secrets": [
