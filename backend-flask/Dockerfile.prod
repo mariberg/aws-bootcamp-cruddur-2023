@@ -30,4 +30,4 @@ EXPOSE ${PORT}
 # on localhost and we don't want that fora container
 # --port=4567 is a common port for Flask
 # python3 -m flask run --host=0.0.0.0 --port=4567
-CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0", "--port=4567" "--no-debug", "--no-debugger", "--no-reload"]
+CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0", "--port=4567", "--no-debug", "--no-debugger", "--no-reload"]
