@@ -9,7 +9,7 @@ echo $PROJECT_PATH
 FRONTEND_REACT_JS_PATH="$PROJECT_PATH/frontend-react-js"
 
 docker build \
---build-arg REACT_APP_BACKEND_URL="https://4567-$GITPOD_WORKSPACE_ID.$GITPOD_WORKSPACE_CLUSTER_HOST" \
+--build-arg REACT_APP_BACKEND_URL="https://api.cloudproject.online" \
 --build-arg REACT_APP_AWS_PROJECT_REGION="$AWS_DEFAULT_REGION" \
 --build-arg REACT_APP_AWS_COGNITO_REGION="$AWS_DEFAULT_REGION" \
 --build-arg REACT_APP_AWS_USER_POOLS_ID="eu-west-2_ZisYUEbiC" \
