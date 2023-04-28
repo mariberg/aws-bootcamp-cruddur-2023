@@ -30,6 +30,3 @@ export async function checkAuth(setUser) {
     })
     .catch((err) => console.log(err));
   };
-  
-
-  export {checkAuth, getAccessToken};
