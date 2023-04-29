@@ -4,7 +4,7 @@ import sys
 from datetime import datetime, timedelta, timezone
 import uuid
 import os
-
+\
 class Ddb:
   def client():
     endpoint_url = os.getenv("AWS_ENDPOINT_URL")
@@ -81,8 +81,7 @@ class Ddb:
     return results
   
   def create_message(client,message_group_uuid, message, my_user_uuid, my_user_display_name, my_user_handle):
-    now = datetime.now(timezone.utc).astimezone().isoformat()
-    created_at = now
+    created_at = datetime.now().isoformat()
     message_uuid = str(uuid.uuid4())
 
     record = {
