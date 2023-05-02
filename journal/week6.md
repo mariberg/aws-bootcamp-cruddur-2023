@@ -60,6 +60,30 @@ Now when inside the container, it was possible to test the RDS container with a 
 
 ## Add service connect to backend-flask
 
+The whole previous set-up for the backend container was done without service connect. The idea of service connect is that it makes it easier to connect to services running on ECS bu creating a private DNS namespace and DNS records for each service instance. This means there is no needto use IP addresses and update configuration files whenever those change. Also Route53 can be used be used with ECS service connect to make the services available to the public internet. 
+
+The service connect configuration was added to the task definition:
+
+```
+    "serviceConnectConfiguration": {
+      "enabled": true,
+      "namespace": "cruddur",
+      "services": [
+        {
+          "portName": "backend-flask",
+          "discoveryName": "backend-flask",
+          "clientAliases": [{"port": 4567}]
+        }
+      ]
+    },
+```
+Service connect automatically creates a Fargate container to run the code in order to provide a reliable, scalable and securre runtime envronment to run the code. The backend service now showed two containers in 'healthy' status based on a successful health-check:
+
+![backend containers](assets/backend_containers.png)
+
+
+
+
 ### Create ECR repo and push image for fronted-react-js
 ### Deploy Frontend React JS app as a service to Fargate
 
