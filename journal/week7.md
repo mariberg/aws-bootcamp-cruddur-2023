@@ -22,7 +22,7 @@ The final step was to modify load balancer to enable access logs. A new S3 bucke
 
 A cerficate was created for the domain and wildcard:
 
-![acm](assets/acm.png)
+![acm](assets/acm.PNG)
 
 
 
