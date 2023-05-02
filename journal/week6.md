@@ -83,7 +83,7 @@ Service connect automatically creates a Fargate container to run the code in ord
 
 
 
-### Create ECR repo and push image for fronted-react-js
+### Create a Dockerfile specifically for production use case - frontend
 
 A task definition file was created for frontend and also a separate Dockerfile.prod was created as it is recommended to have a separate Dockerfile for production. For frontend the app has to be build for production, which is a step that wasn't done in development. In order to serve this files, Nginx will need to be used. 
 
@@ -124,6 +124,8 @@ By using multi-stage build the final image size is kept small by discarding the 
 
 Nginx.conf -file was also added to the application to enable using it. 
 
+### Create ECR repo and push image for fronted-react-js
+
 It now possible to run ``npm run build`` to test that it builds correctly before deploying the container. After this a new repo for frontend was created and the image was built, tagged and pushed. Command ``docker run --rm -p 3000:3000 -it frontend-react-js`` could now be used to run this container individually locally:
 
 ![individual container](assets/individual_container.png)
@@ -143,6 +145,47 @@ The frontend application could now be accessed throug the load balancer url (cre
 
 
 ### Configure task definitions to contain X-ray and turn on Container Insights
+
+X-ray was added to the backend task definition:
+
+```
+"containerDefinitions": [
+      {
+        "name": "xray",
+        "image": "public.ecr.aws/xray/aws-xray-daemon",
+        "essential": true,
+        "user": "1337",
+        "portMappings": [
+          {
+            "name": "xray",
+            "containerPort": 2000,
+            "protocol": "udp"
+          }
+        ]
+      },
+```
+
+A bash script to update the task definition was also created so that the command doesn't have to be used every time.
+
+After re-deplying the backend service, there were now three containers:
+
+![xray container](assets/xray_container.png)
+
+The Xray health-check shows unknown as there is no health-check setup for it. 
+
+
+
 ### Change Docker Compose to explicitly use a user-defined network
-### Create a Dockerfile specifically for production use case
+
+Docker creates a network every time 'docker compose up' is run. This could be seen with command ``docker network list``. This would be a default network if nothing was manually set up. The network was not manually changed to 'cruddur-net' on the docker-compose:
+
+```
+networks: 
+  cruddur-net:
+    driver: bridge
+    name: cruddur-net
+```
+
+After this cruddur-net had to be added as a Docker network on all services in docker-compose and run -files. This can be checked by running ``docker network inspect``.
+
 ### Using Ruby generate out env dot files for Docker using erb-templates
