@@ -83,9 +83,64 @@ Service connect automatically creates a Fargate container to run the code in ord
 
 
 
-
 ### Create ECR repo and push image for fronted-react-js
+
+A task definition file was created for frontend and also a separate Dockerfile.prod was created as it is recommended to have a separate Dockerfile for production. For frontend the app has to be build for production, which is a step that wasn't done in development. In order to serve this files, Nginx will need to be used. 
+
+The Dockerfile.prod uses a multi-stage build set-up where it first builds the application in a build-folder with the necessary environment variables and then serves the application from the build folder with nginx:
+
+```
+# Base Image ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+FROM node:16.18 AS build
+
+ARG REACT_APP_BACKEND_URL
+ARG REACT_APP_AWS_PROJECT_REGION
+ARG REACT_APP_AWS_COGNITO_REGION
+ARG REACT_APP_AWS_USER_POOLS_ID
+ARG REACT_APP_CLIENT_ID
+
+ENV REACT_APP_BACKEND_URL=$REACT_APP_BACKEND_URL
+ENV REACT_APP_AWS_PROJECT_REGION=$REACT_APP_AWS_PROJECT_REGION
+ENV REACT_APP_AWS_COGNITO_REGION=$REACT_APP_AWS_COGNITO_REGION
+ENV REACT_APP_AWS_USER_POOLS_ID=$REACT_APP_AWS_USER_POOLS_ID
+ENV REACT_APP_CLIENT_ID=$REACT_APP_CLIENT_ID
+
+COPY . ./frontend-react-js
+WORKDIR /frontend-react-js
+RUN npm install
+RUN npm run build
+
+# New Base Image ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+FROM nginx:1.23.3-alpine
+
+# --from build is coming from the Base Image
+COPY --from=build /frontend-react-js/build /usr/share/nginx/html
+COPY --from=build /frontend-react-js/nginx.conf /etc/nginx/nginx.conf
+
+EXPOSE 3000
+```
+
+By using multi-stage build the final image size is kept small by discarding the build artifacts and only coyping the final build output to the production image. 
+
+Nginx.conf -file was also added to the application to enable using it. 
+
+It now possible to run ``npm run build`` to test that it builds correctly before deploying the container. After this a new repo for frontend was created and the image was built, tagged and pushed. Command ``docker run --rm -p 3000:3000 -it frontend-react-js`` could now be used to run this container individually locally:
+
+![individual container](assets/individual_container.png)
+
+ 
+
 ### Deploy Frontend React JS app as a service to Fargate
+
+Frontend service could now be deployed with service connect configuration and by using similar commands as above for backend.
+
+After the deploying the container there also had to be a way to login to it locally in order to debug it more easily. A bash script didn't work as an error suggested it doesn't have bash. For this reason for connect script had to use 'bin/sh' instead of 'bin/bash'. Now logged into the container it was possible to check that this Alpine container actually has curl instead unlike the backend-container. This means it is possible to use curl to run a health-check. This was added to the task definition. 
+
+The frontend application could now be accessed throug the load balancer url (creation of load balancer described in week 7 journal):
+
+![ALB port 3000](assets/load_balancer_3000.png)
+
+
 
 ### Configure task definitions to contain X-ray and turn on Container Insights
 ### Change Docker Compose to explicitly use a user-defined network
