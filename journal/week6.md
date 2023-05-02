@@ -48,6 +48,17 @@ Whenever the task-definition is updated, this command has to be re-run.
 
 The last step before being able to create a container, was creating a security groups. AWS CLI command was used to get the default VPC ID from AWS and then another CLI command to create a security group. The first try of creating a service run into a 404 permission error, which meant the permissions had to be tweaked a few times before it worked. 
 
+Next a way to log into a backend container was needed in order to make debugging easier. A bash sript was added in the ECR folder. I had first issues logging into my container and kept receiving this error:
+
+![InvalidParameterException.png](assets/InvalidParameterException.png)
+
+I troubleshooted this by running ``aws ecs describe-tasks``, which showed that executeCommand -flag was set up as 'false'. However my in the task definition file the enableExecuteCommand had been set up as 'true'. I spend some time on this, which helped me to understand the whole process and all the steps we had taken before. I think in the end the issue was that I had been looking at a task that didn't actually use the updated task defition and for this reason there was a discrepancy. By running update service and forcing a new deployment I was able to get my task have the enable execute command as 'true'. Loggin in to the container worked now:
+
+![login backend](assets/backend-login.png)
+
+Now when inside the container, it was possible to test the RDS container with a bash script that was created for this purpose. The connection just hang, which meant the security group had to be updated to allow the container to access it. The security group of the ECS service was added as an inbound rule to the security group of RDS database and after that the ``bin/db/test`` script could be run successfully. 
+
+## Add service connect to backend-flask
 
 ### Create ECR repo and push image for fronted-react-js
 ### Deploy Frontend React JS app as a service to Fargate
