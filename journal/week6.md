@@ -4,6 +4,10 @@ This week was delivered together with week 7 so some topics are overlapping and 
 
 There are several option to deploy containers on AWS: Lambdas, AppRunner, ECS EC2, Elastic Beantstalk, Fargate and Kubernetes. ECS EC2 was considered as an option for this bootcamp as it would be possible to utilize freetier, however you would have to manage compute and also connecting EC2 instances to Cognito is not straightforward as in EC2 the IP addresses are private, which means you would have to use NAT Gateway, which would create costs. In the end a decition was made to use Fargate serverless containers even though there will be some spend, but the solution is fully managed so you don't have to manage compute nad it is also a good migration path to Kubernetes. 
 
+This diagram shows that parts of architecture that was covered during weeks 6-7:
+
+![diagram](assets/diagram.png)
+
 ### Provision ECS Cluster
 
 Before starting with ECS, a way to make health checks was needed. A health-check for the Flask app was implemented by adding a simple endpoint to app.py and adding a Python script for it. 
