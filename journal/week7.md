@@ -68,7 +68,7 @@ The backend service was then redeployed.
 
 ### Secure Flask by not running in debug mode
 
-The issue with the Flask application was that it was running in debug mode, which meant anyone would be able to see the error messages and it is possible for attackers to add arbitrary Python code through the browser. The best option is to use debug mode only for development instead of production. This shouldn't be an issue as Rollbar is used for error logging. A separate Dockerfile.prod was created now for frontend and these flags were added ``"--no-debug", "--no-debugger", "--no-reload"``. Accessing a path that doesn't exist, doesn't anymore reveal access logs, instead, the user will just see a general internal server error:
+The issue with the Flask application was that it was running in debug mode, which meant anyone would be able to see the error messages and it is possible for attackers to add arbitrary Python code through the browser. The best option is to use debug mode only for development instead of production. This shouldn't be an issue as Rollbar is used for error logging. The following flags were added to the Dockercompose.prod-file: ``"--no-debug", "--no-debugger", "--no-reload"``. Accessing a path that doesn't exist, doesn't anymore reveal access logs, instead, the user will just see a general internal server error:
 
 ![debug mode disabled](assets/debug_off.png)
 
