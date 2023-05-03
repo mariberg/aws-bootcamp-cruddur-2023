@@ -81,7 +81,7 @@ The service connect configuration was added to the task definition:
       ]
     },
 ```
-Service connect automatically creates a Fargate container to run the code in order to provide a reliable, scalable and securre runtime envronment to run the code. The backend service now showed two containers in 'healthy' status based on a successful health-check:
+Service connect automatically creates an envoy proxy Fargate container to run the code in order to provide a reliable, scalable and secure runtime envronment to run the code. The backend service now showed two containers in 'healthy' status based on a successful health-check:
 
 ![backend containers](assets/backend_containers.png)
 
@@ -193,3 +193,13 @@ networks:
 After this cruddur-net had to be added as a Docker network on all services in docker-compose and run -files. This can be checked by running ``docker network inspect``.
 
 ### Using Ruby generate out env dot files for Docker using erb-templates
+
+Ruby was chosen as a langauge to generate env dot files for Docker, as it has a solution that is straightforward to implement. ``generate env`` -files in frontend and backend bin-folders contain a few lines of Ruby code that reads the environment variables of newly created erb-files. It then explands the env variables to .env-files, that remain untracked and won't be committed to Github in order no to expose any secrets:
+
+![env files](assets/env.png)
+
+The following line of code was added to frontend and backend to create these files every time the workspace is opened:
+
+```
+source "$THEIA_WORKSPACE_ROOT/bin/frontend/generate-env"
+```
