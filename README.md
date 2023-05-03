@@ -17,14 +17,14 @@ At the start of the bootcamp you need to create a new Github Repository from thi
 
 The `/journal` directory contains
 
-- [ ] [Week 0](journal/week0.md)
-- [ ] [Week 1](journal/week1.md)
-- [ ] [Week 2](journal/week2.md)
-- [ ] [Week 3](journal/week3.md)
-- [ ] [Week 4](journal/week4.md)
-- [ ] [Week 5](journal/week5.md)
-- [ ] [Week 6](journal/week6.md)
-- [ ] [Week 7](journal/week7.md)
+- [ ] [Week 0 - Billing and Architecture](journal/week0.md)
+- [ ] [Week 1 - App Containerization](journal/week1.md)
+- [ ] [Week 2 - Distributed Tracing](journal/week2.md)
+- [ ] [Week 3 - Decentralized Authentication](journal/week3.md)
+- [ ] [Week 4 - Postgres and RDS](journal/week4.md)
+- [ ] [Week 5 - DynamoDB and Serverless Caching](journal/week5.md)
+- [ ] [Week 6 - Deploying Containers](journal/week6.md)
+- [ ] [Week 7 - Solving CORS with a Load Balancer and Custom Domain](journal/week7.md)
 - [ ] [Week 8](journal/week8.md)
 - [ ] [Week 9](journal/week9.md)
 - [ ] [Week 10](journal/week10.md)
