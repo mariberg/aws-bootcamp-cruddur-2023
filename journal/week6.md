@@ -131,7 +131,7 @@ By using a multi-stage build the final image size is kept small by discarding th
 
 Nginx.conf -file was also added to the application to enable using it. 
 
-### Create ECR repo and push image for fronted-react-js
+### Create ECR repo and push image for frontend-react-js
 
 It was now possible to run npm run build to test that it builds correctly before deploying the container. After this a new repo for frontend was created and the image was built, tagged and pushed. Command docker run --rm -p 3000:3000 -it frontend-react-js could now be used to run this container individually locally:
 
