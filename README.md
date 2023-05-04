@@ -25,7 +25,7 @@ The `/journal` directory contains
 - [ ] [Week 5 - DynamoDB and Serverless Caching](journal/week5.md)
 - [ ] [Week 6 - Deploying Containers](journal/week6.md)
 - [ ] [Week 7 - Solving CORS with a Load Balancer and Custom Domain](journal/week7.md)
-- [ ] [Week 8](journal/week8.md)
+- [ ] [Week 8 - Serverless Image Processing](journal/week8.md)
 - [ ] [Week 9](journal/week9.md)
 - [ ] [Week 10](journal/week10.md)
 - [ ] [Week 11](journal/week11.md)
