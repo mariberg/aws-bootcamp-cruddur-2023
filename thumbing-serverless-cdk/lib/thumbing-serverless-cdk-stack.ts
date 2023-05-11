@@ -1,4 +1,5 @@
 import * as cdk from 'aws-cdk-lib';
+import * as iam from 'aws-cdk-lib/aws-iam';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { S3 } from 'aws-cdk-lib/aws-ses-actions';
@@ -32,6 +33,9 @@ export class ThumbingServerlessCdkStack extends cdk.Stack {
     const lambda = this.createLambda(functionPath, bucketName, folderInput, folderOutput);
 
     this.createS3NotifyToLambda(folderInput,lambda,bucket)
+
+    const s3ReadWritePolicy = this.createPolicyBucketAccess(bucket.bucketArn)
+    lambda.addToRolePolicy(s3ReadWritePolicy);
   }
 
    
@@ -72,6 +76,19 @@ export class ThumbingServerlessCdkStack extends cdk.Stack {
         destination,
         {prefix: prefix} // folder to contain the original images
       )
+    }
+
+    createPolicyBucketAccess(bucketArn: string){
+      const s3ReadWritePolicy = new iam.PolicyStatement({
+        actions: [
+          's3:GetObject',
+          's3:PutObject',
+        ],
+        resources: [
+          `${bucketArn}/*`,
+        ]
+      });
+      return s3ReadWritePolicy;
     }
     
   
