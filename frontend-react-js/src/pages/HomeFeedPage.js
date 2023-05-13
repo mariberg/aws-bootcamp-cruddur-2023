@@ -66,12 +66,17 @@ export default function HomeFeedPage() {
           setActivities={setActivities} 
           activities={activities} 
         />
+        <div className='activity_feed'>
+          <div className='activity_feed_heading'>
+            <div className='title'>Home</div>
+          </div>
         <ActivityFeed 
           title="Home" 
           setReplyActivity={setReplyActivity} 
           setPopped={setPoppedReply} 
           activities={activities} 
         />
+        </div>
       </div>
       <DesktopSidebar user={user} />
     </article>
