@@ -6,18 +6,18 @@ import DesktopNavigation  from '../components/DesktopNavigation';
 import DesktopSidebar     from '../components/DesktopSidebar';
 import ActivityFeed from '../components/ActivityFeed';
 import ActivityForm from '../components/ActivityForm';
-import EditProfileButton from '../components/EditProfileButton';
+import ProfileHeading from '../components/ProfileHeading';
 import { checkAuth, getAccessToken } from '../lib/CheckAuth';
 
 export default function UserFeedPage() {
   const [activities, setActivities] = React.useState([]);
   const [profile, setProfile] = React.useState([]);
   const [popped, setPopped] = React.useState([]);
+  const [poppedProfile, setPoppedProfile] = React.useState([]);
   const [user, setUser] = React.useState(null);
   const dataFetchedRef = React.useRef(false);
 
   const params = useParams();
-  const title = `@${params.handle}`;
 
   const loadData = async () => {
     try {
@@ -59,9 +59,7 @@ export default function UserFeedPage() {
       <div className='content'>
         <ActivityForm popped={popped} setActivities={setActivities} />
         <div className='activity_feed'>
-          <div className='activity_feed_heading'>
-            <div className='title'>{title}</div>
-          </div>
+          <ProfileHeading setPopped={setPoppedProfile} profile={profile} />
         <ActivityFeed activities={activities} />
       </div>
       </div>
