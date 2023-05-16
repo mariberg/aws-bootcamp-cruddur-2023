@@ -15,7 +15,7 @@ SELECT
             activities.expires_at
         FROM public.activities
         WHERE
-            activities.user_uuid = users_uuid
+            activities.user_uuid = users.uuid
         ORDER BY activities.created_at DESC
         LIMIT 40
     ) array_row)as activities

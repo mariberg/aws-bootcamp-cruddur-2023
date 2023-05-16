@@ -21,7 +21,7 @@ export default function UserFeedPage() {
 
   const loadData = async () => {
     try {
-      const backend_url = `${process.env.REACT_APP_BACKEND_URL}/api/activities/${title}`
+      const backend_url = `${process.env.REACT_APP_BACKEND_URL}/api/activities/@${params.handle}`
       await getAccessToken()
       const access_token = localStorage.getItem("access_token")
       const res = await fetch(backend_url, {
@@ -31,6 +31,7 @@ export default function UserFeedPage() {
         method: "GET"
       });
       let resJson = await res.json();
+      console.log('Profile:', resJson.profile);
       if (res.status === 200) {
         setProfile(resJson.profile)
         setActivities(resJson.activities)
