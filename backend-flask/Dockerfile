@@ -23,6 +23,8 @@ COPY . .
 
 EXPOSE ${PORT}
 
+ENV PYTHONBUFFERED-=1
+
 # CMD (command) = what will run inside the container when you run it was a container
 # were running Python 3 
 # -m is for module 
