@@ -10,6 +10,4 @@ printf "${CYAN}== ${LABEL}${NO_COLOR}\n"
 ABS_PATH=$(readlink -f "$0")
 BIN_DIR=$(dirname $ABS_PATH)
 
-source "$DB_DIR/db/setup"
-source "$DB_DIR/ddb/schema-load"
-source "$DB_DIR/ddb/seed"
+source "$DB_DIR/ecr/login"
