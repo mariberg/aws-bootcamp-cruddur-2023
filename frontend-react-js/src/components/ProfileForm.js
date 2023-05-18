@@ -15,8 +15,29 @@ export default function ProfileForm(props) {
   }, [props.profile])
 
   const s3upload = async (event) => {
-    
-  } 
+    try {
+      const backend_url = "https://bwy5xg9rmj.execute-api.eu-west-2.amazonaws.com/avatars/key_upload"
+      await getAccessToken()
+      const access_token = localStorage.getItem("access_token")
+      const res = await fetch(backend_url, {
+        method: "POST",
+        headers: {
+          'Authorization': `Bearer ${access_token}`,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        
+      });
+      let data = await res.json();
+      if (res.status === 200) {
+        console.log('presigned url',data);
+      } else {
+        console.log(res)
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   const onsubmit = async (event) => {
     event.preventDefault();
