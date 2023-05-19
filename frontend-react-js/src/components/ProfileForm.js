@@ -14,8 +14,9 @@ export default function ProfileForm(props) {
     setDisplayName(props.profile.display_name);
   }, [props.profile])
 
-  const s3upload = async (event) => {
+  const s3uploadkey = async (event)=> {
     try {
+      console.log('s3upload')
       const backend_url = "https://bwy5xg9rmj.execute-api.eu-west-2.amazonaws.com/avatars/key_upload"
       await getAccessToken()
       const access_token = localStorage.getItem("access_token")
@@ -25,9 +26,7 @@ export default function ProfileForm(props) {
           'Authorization': `Bearer ${access_token}`,
           'Accept': 'application/json',
           'Content-Type': 'application/json'
-        },
-        
-      });
+        }});
       let data = await res.json();
       if (res.status === 200) {
         console.log('presigned url',data);
@@ -39,6 +38,7 @@ export default function ProfileForm(props) {
     }
   }
 
+  
   const onsubmit = async (event) => {
     event.preventDefault();
     try {
@@ -69,7 +69,7 @@ export default function ProfileForm(props) {
       console.log(err);
     }
   }
-
+ 
   const bio_onchange = (event) => {
     setBio(event.target.value);
   }
@@ -98,7 +98,7 @@ export default function ProfileForm(props) {
             </div>
           </div>
           <div className="popup_content">
-            <div className="upload" onClick={s3upload}>
+            <div className="upload" onClick={s3uploadkey}>
               Upload Avatar
             </div>
 
