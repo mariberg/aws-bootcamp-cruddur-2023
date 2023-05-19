@@ -5,6 +5,7 @@ import {getAccessToken} from 'lib/CheckAuth';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 
 export default function ProfileForm(props) {
+  const [presignedUrl, setPresignedUrl] = React.useState(0);
   const [bio, setBio] = React.useState(0);
   const [displayName, setDisplayName] = React.useState(0);
 
@@ -17,19 +18,19 @@ export default function ProfileForm(props) {
   const s3uploadkey = async (event)=> {
     try {
       console.log('s3upload')
-      const backend_url = "https://bwy5xg9rmj.execute-api.eu-west-2.amazonaws.com/avatars/key_upload"
-      await getAccessToken()
-      const access_token = localStorage.getItem("access_token")
-      const res = await fetch(backend_url, {
+      //await getAccessToken()
+      //const access_token = localStorage.getItem("access_token")
+      const res = await fetch(presignedUrl, {
         method: "POST",
         headers: {
+          'Origin': "https://3000-mariberg-awsbootcampcru-dpzr0jwt547.ws-eu97.gitpod.io",
           'Authorization': `Bearer ${access_token}`,
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         }});
       let data = await res.json();
       if (res.status === 200) {
-        console.log('presigned url',data);
+        setPresignedUrl(data.url)
       } else {
         console.log(res)
       }
