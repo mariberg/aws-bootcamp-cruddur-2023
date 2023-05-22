@@ -104,9 +104,6 @@ export default function ProfileForm(props) {
       console.log(err);
     }
   }
-
-  const presignedurl = await s3uploadkey()
-  console.log('presignedurl',presignedurl)
  
   const bio_onchange = (event) => {
     setBio(event.target.value);
