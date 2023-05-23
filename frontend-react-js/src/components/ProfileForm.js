@@ -5,22 +5,25 @@ import {getAccessToken} from 'lib/CheckAuth';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 
 export default function ProfileForm(props) {
-  const [bio, setBio] = React.useState(0);
-  const [displayName, setDisplayName] = React.useState(0);
+  const [bio, setBio] = React.useState("");
+  const [displayName, setDisplayName] = React.useState("");
 
   React.useEffect(()=>{
-    console.log('useEffects',props)
-    setBio(props.profile.bio);
+    setBio(props.profile.bio || '');
     setDisplayName(props.profile.display_name);
   }, [props.profile])
 
-  const s3uploadkey = async (event)=> {
+  const s3uploadkey = async (extension)=> {
     try {
       console.log('s3upload')
-      const backend_url = `${process.env.REACT_APP_API_GATEWAY_ENDPOINT_URL}/avatars/key_upload`
+      const gateway_url = `${process.env.REACT_APP_API_GATEWAY_ENDPOINT_URL}/avatars/key_upload`
       await getAccessToken()
       const access_token = localStorage.getItem("access_token")
-      const res = await fetch(backend_url, {
+      const json = {
+        extension: extension
+      };
+      const res = await fetch(gateway_url, {
+        body: JSON.stringify(json),
         method: "POST",
         headers: {
           'Origin': process.env.REACT_APP_FRONTEND_URL,
@@ -41,29 +44,27 @@ export default function ProfileForm(props) {
   }
 
   const s3upload = async (event)=> {
-    console.log('event',event)
     const file = event.target.files[0]
     console.log('file',file)
     const filename = file.name
     const size = file.size
     const type = file.type
-    const preview_image_url = URL.createObjectURL(file)
-    console.log(filename,size,type)
-
-    const presignedurl = await s3uploadkey()
-    console.log('pp',presignedurl)
+    const preview_image_url = URL.createObjectURL(file);
+    console.log(filename,size,type);
+    const fileparts = filename.split(".");
+    const extension = fileparts[fileparts.length - 1];
+    const presignedurl = await s3uploadkey(extension)
+    console.log('presignedurl',presignedurl)
     try {
       console.log('s3upload')
-      const backend_url = ""
       const res = await fetch(presignedurl, {
         method: "PUT",
         body: file,
         headers: {
           'Content-Type': type
       }})
-      let data = await res.json();
       if (res.status === 200) {
-        setPresignedurl(data.url)
+        
       } else {
         console.log(res)
       }
@@ -92,7 +93,6 @@ export default function ProfileForm(props) {
         }),
       });
       let data = await res.json();
-      setPresignedUrl(data.url)
       if (res.status === 200) {
         setBio(null)
         setDisplayName(null)
