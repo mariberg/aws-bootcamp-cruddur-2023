@@ -5,11 +5,12 @@ import {getAccessToken} from 'lib/CheckAuth';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 
 export default function ProfileForm(props) {
-  const [bio, setBio] = React.useState("");
-  const [displayName, setDisplayName] = React.useState("");
+  const [bio, setBio] = React.useState('');
+  const [displayName, setDisplayName] = React.useState('');
 
   React.useEffect(()=>{
     setBio(props.profile.bio || '');
+    console.log('bio', props.profile.bio)
     setDisplayName(props.profile.display_name);
   }, [props.profile])
 

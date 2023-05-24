@@ -2,7 +2,7 @@
     padding-bottom: 0px;
   }
 
-.profile_heading .profile_avatar {
+.profile_heading .profile-avatar {
     position: absolute;
     bottom: -74px;
     left: 16px;
@@ -27,7 +27,7 @@
 
 .profile_heading .info .id {
     padding-top: 70px;
-    flex-grow: 1
+    flex-grow: 1;
 }
 
 .profile_heading .info .id .display_name {
