@@ -33,3 +33,11 @@ The S3 bucket should also have a Lifecycle policy to delete the unprocessed imag
 ###  Create JWT Lambda Layer
 
 ### Render Avatars in App via CloudFront
+
+The application was at still point still rendering the heardcoded mock avatar and it was now time to display the avatar that has been saved for the user. Cognito sub was added to checkAuth.js setUser function:
+
+``cognito_user_uuid: cognito_user.attributes.sub``
+
+A new component called ``profileAvatar.js``, was created. It was then imported to the other components (profileInfo, profileHeading) that display the avatar. The application was now able to display the avatar based on the user’s uuid:
+
+![cruddur](assets/cruddur.png)
