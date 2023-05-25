@@ -6,9 +6,46 @@ The below diagram describes the architecture for the serverless image processing
 
 ### Implement CDK Stack
 
-The first part of the project for the S3 uploads buckets, image processing Lambda and S3 assets bucket was created by using AWS CDK. The code can be found in the ``thumbing-serverless-cdk``-folder. This code consists of one stack, that creates a Lambda function, and S3 bucket and imports another S3 bucket that has already been created in the AWS console. Additionally, it creates an S3 notification for the Lambda function and an SNS topic that could in the future be used for adding these images to the database:
+The first part of the project for the S3 uploads bucket, image processing Lambda and S3 assets bucket was created by using AWS CDK. The code can be found in the ``thumbing-serverless-cdk``-folder. This code consists of one stack, that creates a Lambda function, an S3 bucket and imports another S3 bucket that has already been created in the AWS console. Additionally, it creates an S3 notification for the Lambda function and an SNS topic that could in the future be used for adding these images to the database:
 
-![event notifications](assets/event_notifications.png)
+```
+   createBucket(bucketName: string): s3.IBucket {
+      ...
+    }
+
+    importBucket(bucketName: string): s3.IBucket {
+      ...
+    }
+
+    createLambda(functionPath: string, uploadsBucketName: string, assetsBucketName: string, folderInput: string, folderOutput: string): lambda.IFunction {
+      ...
+    }
+
+    createS3NotifyToLambda(prefix: string, lambda: lambda.IFunction, bucket: s3.IBucket): void {
+      ...
+    }
+
+    createPolicyBucketAccess(bucketArn: string){
+      ...
+    }
+
+
+    createSnsTopic(topicName: string): sns.ITopic{
+      ...
+    }
+    
+    createSnsSubscription(snsTopic: sns.ITopic, webhookUrl: string): sns.Subscription {
+       ...
+    }
+
+    createS3NotifyToSns(prefix: string, snsTopic: sns.ITopic, bucket: s3.IBucket): void {
+      ...
+    }
+```
+
+The stack was deployed with command ``cdk deploy``:
+
+![stak](assets/stack.png)
 
 ### Serve Avatars via CloudFront
 
@@ -84,7 +121,7 @@ The app now shows the bio and by clicking the edit button it is possible to upda
 
 In order for the users to upload their avatars into the S3 bucket, a presigned URL is needed. The idea is that the creation of the presigned URL is triggered when there is a file upload with a file attached. 
 
-The architecture is implemented with API Gateway and Lambda. The Lambda code is written in Ruby in file ``lambdas/cruddur-upload-avatar/function.rb``. When running the code locally with ``bundle exec ruby function.rb``, a presigned URL is created. The backend was then tested with Thunder client that was installed as a VC Code extension. Now when doing a PUT request to the presigned URL and adding the image as a binary attachment to the body, a mock.jpg file was added to the S3 bucket:
+The architecture is implemented with API Gateway and Lambda. The Lambda code is written in Ruby in file ``lambdas/cruddur-upload-avatar/function.rb``. When running the code locally with ``bundle exec ruby function.rb``, a presigned URL is created. The backend was then tested with Thunder client that was installed as a VC Code extension. Now when doing a PUT request (later changed to POST) to the presigned URL and adding the image as a binary attachment to the body, a mock.jpg file was added to the S3 bucket:
 
 ![Thunder client](assets/thunder.png)
 
@@ -112,14 +149,13 @@ The CORS issue was still persisting due to a missing CORS policy for the S3 buck
 
 The CruddurAvatarUpload Lambda function continued to return the error ``"errorMessage": "cannot load such file --jwt"``. Various ways to fix this issue were tried, but to only way to make it work was to add a Lambda layer. A new bin script ruby-jwt was created:
 
-``
+```
 #! /usr/bin/bash
 gem i jwt -Ni /tmp/lambda-layers/ruby-jwt/ruby/gems/2.7.0
 cd /tmp/lambda-layers/ruby-jwt
-
 zip -r lambda-layers . -x ".*" -x "*/.*"
 zipinfo -t lambda-layers
-``
+```
 
 This code creates a zip file in the temp folder for all the Ruby gems. After that a Lambda layer could be created in the AWS console and the jwt layer could be selected as a custom layer. 
 
