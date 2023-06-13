@@ -1,8 +1,12 @@
 # Week 8 — Serverless Image Processing
 
-The below diagram describes the architecture for the serverless image processing that was completed this week. When the user wants to upload a new avatar, a request is sent to API Gateway, which is attached to two Lambda functions. The first Lambda checks the user's Cognito authorization and the second Lambda deals with CORS and makes an API call to request a presigned URL. The presigned URL is then returned to the client and it can be used to upload the image to the S3 bucket. The S3 bucket has an event notification that notifies a Lambda function of each new image. These images are then processed by Lambda and added to another S3 bucket, from where they are served to the client via CloudFront.
+During this week the image processing for this application was completed by using serverless architecture. When the user wants to upload a new avatar, a request is sent to API Gateway, which is attached to two Lambda functions. The first Lambda checks the user's Cognito authorization and the second Lambda deals with CORS and makes an API call to request a presigned URL. The presigned URL is then returned to the client and it can be used to upload the image to the S3 bucket. The S3 bucket has an event notification that notifies a Lambda function of each new image. These images are then processed by Lambda and added to another S3 bucket, from where they are served to the client via CloudFront.
+
+I have created the below diagram to give a visual overview of how the serverless image processing works:
 
 ![week8 diagram](assets/week8_diagram.png)
+
+To view the diagram in Lucichart click [here](https://lucid.app/lucidchart/fb0dec0c-b43b-49fe-8b51-efa3819e499c/edit?invitationId=inv_a657ce4e-5bf9-4314-82a9-debe4aae3ba7).
 
 ### Implement CDK Stack
 
