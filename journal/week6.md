@@ -4,9 +4,10 @@ This week was delivered together with week 7 so some topics are overlapping and 
 
 There are several options to deploy containers on AWS: Lambdas, AppRunner, ECS EC2, Elastic Beanstalk, Fargate and Kubernetes. ECS EC2 was considered as an option for this bootcamp as it would be possible to utilize free-tier, however, you would have to manage compute and also connecting EC2 instances to Cognito is not straightforward as in EC2 the IP addresses are private, which means you would have to use NAT Gateway, which would create costs. In the end, a decision was made to use Fargate serverless containers even though there will be some spending, but the solution is fully managed so you don't have to manage compute and it is also a good migration path to Kubernetes.
 
-This diagram shows the parts of the architecture that were covered during weeks 6-7:
+This diagram shows the parts of the architecture that were covered during weeks 6-7 (To view diagram in Lucidchart click [here](https://lucid.app/lucidchart/37f12d41-1020-4e2a-8ad5-f902420af1e7/edit?invitationId=inv_dd217811-bf15-4cc4-92b7-04f53a2f3157)):
 
 ![diagram](assets/diagram.png)
+
 
 ### Provision ECS Cluster
 
