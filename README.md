@@ -10,7 +10,7 @@ Parts of the application itself were ready when the bootcamp started, but a larg
 
 ## AWS services that were used
 
-The application has been deployed on AWS by utilizing several AWS services. The frontend and backend have both been deployed as Docker containers on **ECS Fargate. 
+The application has been deployed on AWS by utilizing several AWS services. The frontend and backend have both been deployed as **Docker** containers on **ECS Fargate**. 
 
 **X-Ray** is instrumented to be used as an observability tool. 
 
@@ -32,6 +32,10 @@ The first version of the project was completed by partially clicking through the
 **Honeycomb** was used as an observability tool as an addition to AWS X-Ray mainly because it was very straightforward to instrument and easy to use.
 
 **Rollbar** was configured to be used for monitoring and bug-tracking.
+
+## Current status
+
+I have completed weeks 0-9 as documented in the below journal. I am currently working towards completing weeks 10-11 and haven't yet written the journal for those weeks.
 
 
 ## Weekly journal
