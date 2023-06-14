@@ -19,6 +19,7 @@ Parameters:
   NetworkingStack:
     Type: String
     Description: This is our base layer of networking components eg VPC, subnets
+    Default: CrdNet
   CertificateArn:
     Type: String
   FrontendPort:
@@ -100,7 +101,7 @@ Resources:
         Fn::Split:
           - ","
           - Fn::ImportValue:
-              !Sub "${NetworkingStack}VpcId"
+              !Sub "${NetworkingStack}SubnetIds"
       LoadBalancerAttributes:
         - Key: routing.http2.enabled
           Value: 'true'
