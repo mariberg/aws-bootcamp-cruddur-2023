@@ -101,7 +101,7 @@ Resources:
         Fn::Split:
           - ","
           - Fn::ImportValue:
-              !Sub "${NetworkingStack}SubnetIds"
+              !Sub "${NetworkingStack}PublicSubnetIds"
       LoadBalancerAttributes:
         - Key: routing.http2.enabled
           Value: 'true'
@@ -137,7 +137,6 @@ Resources:
       LoadBalancerArn: !Ref ALB
       DefaultActions:
         - Type: redirect
-          TargetGroupArn: !Ref BackendTG
           RedirectConfig:
             Protocol: HTTPS
             Port: "443"
@@ -163,6 +162,9 @@ Resources:
     Properties:
       GroupName: !Sub "${AWS::StackName}AlbSG"
       GroupDescription: Public facing security group for Cruddur ALB
+      VpcId: 
+        Fn::ImportValue:
+          !Sub ${NetworkingStack}VpcId
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 443
@@ -198,7 +200,7 @@ Resources:
           Value: '0'
       VpcId: 
         Fn::ImportValue:
-          !Sub ${NetworkingStack}VpcID
+          !Sub ${NetworkingStack}VpcId
       Tags:
         - Key: target-group-name
           Value: frontend
@@ -226,7 +228,7 @@ Resources:
           Value: '0'
       VpcId: 
         Fn::ImportValue:
-          !Sub ${NetworkingStack}VpcID
+          !Sub ${NetworkingStack}VpcId
       Tags:
         - Key: target-group-name
           Value: frontend
