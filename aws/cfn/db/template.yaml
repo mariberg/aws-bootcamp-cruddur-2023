@@ -5,21 +5,87 @@ Description: |
     - RDS Instance
     - Database Security group
 Parameters:
-    BackupRetentionPeriod:
-      Type: Number
-      Default: 0
-    DBInstanceClass:
-      Type: String
-      Default: db.t4g.micro
+  ClusterStack:
+    Type: String
+    Description: This is our Fargate cluster 
+    Default: CrdCluster
+  NetworkingStack:
+    Type: String
+    Description: This is our base layer of networking components
+    Default: CrdNet
+  BackupRetentionPeriod:
+    Type: Number
+    Default: 0
+  DBInstanceClass:
+    Type: String
+    Default: db.t4g.micro
+  DBInstanceIdentifier:
+    Type: String
+    Default: cruddur-instance
+  DBName:
+    Type: String
+    Default: cruddur
+  DeletionProtection:
+    Type: String
+    AllowedValues:
+      - true
+      - false
+    Default: true
+  EngineVersion:
+    Type: String
+    Default: '15.2'
+  MasterUsername:
+    Type: String
+  MasterUserPassword: 
+    Type: String
+    NoEcho: true
+   
 Resources:
-  Type: AWS::RDS::DBInstance
-  DeletionPolicy: 'Snapshot'
-  UpdateReplacePolicy: 'Snapshop'
-  Properties:
-    AllocatedStorage: String
-    AllowMajorVersionUpdgrade: true
-    AutoMinorVersionUpgrade: true
-    BackupRetentionPeriod: !Ref BackupRetentionPeriod
+  RDSPostgresSG:
+    # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group.html
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: !Sub "${AWS::StackName}RDSSG"
+      GroupDescription: Public Facing SG for our Cruddur ALB
+      VpcId:
+        Fn::ImportValue:
+          !Sub ${NetworkingStack}VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          SourceSecurityGroupId:
+            Fn::ImportValue:
+              !Sub ${ClusterStack}ServiceSecurityGroupId
+          FromPort: 5432
+          ToPort: 5432
+          Description: ALB HTTP
+  DBSubnetGroup: 
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupName: !Sub "${AWS::StackName}DBSubnetGroup"
+      DBSubnetGroupDescription: !Sub "${AWS::StackName}DBSubnetGroup"
+      SubnetIds: { 'Fn::Split' : [ ','  , { "Fn::ImportValue": { "Fn::Sub": "${NetworkingStack}PublicSubnetIds" }}] }
+  Database:
+    Type: AWS::RDS::DBInstance
+    DeletionPolicy: 'Snapshot'
+    UpdateReplacePolicy: 'Snapshot'
+    Properties:
+      AllocatedStorage: '20'
+      AllowMajorVersionUpgrade: true
+      AutoMinorVersionUpgrade: true
+      BackupRetentionPeriod: !Ref BackupRetentionPeriod
+      DBInstanceClass: !Ref DBInstanceClass
+      DBInstanceIdentifier: !Ref DBInstanceIdentifier
+      DBName: !Ref DBName
+      DBSubnetGroupName: !Ref DBSubnetGroup
+      DeletionProtection: !Ref DeletionProtection
+      Engine: postgres
+      EngineVersion: !Ref EngineVersion
+      MasterUsername: !Ref MasterUsername
+      MasterUserPassword: !Ref MasterUserPassword
+      PubliclyAccessible: true 
+      VPCSecurityGroups:
+        - !GetAtt RDSPostgresSG.GroupId
+
 
 
 #Outputs:

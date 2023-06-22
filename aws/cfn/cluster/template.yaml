@@ -177,6 +177,21 @@ Resources:
           ToPort: 80
           CidrIp: '0.0.0.0/0'
           Description: Internet HTTP
+  # we have t create this SG before the service so that we can create the db SG
+  ServiceSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: !Sub "${AWS::StackName}ServSG"
+      GroupDescription: Security Group for Fargate services for Cruddur
+      VpcId: 
+        Fn::ImportValue:
+          !Sub ${NetworkingStack}VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          SourceSecurityGroupId: !GetAtt ALBSG.GroupId
+          FromPort: 80
+          ToPort: 80
+          Description: ALB HTTP
   BackendTG:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
@@ -243,6 +258,10 @@ Outputs:
     Value: !GetAtt ALBSG.GroupId
     Export:
       Name: !Sub "${AWS::StackName}ALBSecurityGroupId"
+  ServiceSecurityGroupId:
+    Value: !GetAtt ServiceSG.GroupId
+    Export:
+      Name: !Sub "${AWS::StackName}ServiceSecurityGroupId"
   FrontendTGArn:
     Value: !Ref FrontendTG
     Export:
