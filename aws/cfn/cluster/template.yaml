@@ -189,8 +189,8 @@ Resources:
       SecurityGroupIngress:
         - IpProtocol: tcp
           SourceSecurityGroupId: !GetAtt ALBSG.GroupId
-          FromPort: 80
-          ToPort: 80
+          FromPort: !Ref BackendPort
+          ToPort: !Ref BackendPort
           Description: ALB HTTP
   BackendTG:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
