@@ -4,7 +4,7 @@ During this week the image processing for this application was completed by usin
 
 I have created the below diagram to give a visual overview of how the serverless image processing works:
 
-![week8 diagram](assets/week8_diagram.png)
+![week8 diagram](assets/week8_diagram_2.png)
 
 To view the diagram in Lucichart click [here](https://lucid.app/lucidchart/fb0dec0c-b43b-49fe-8b51-efa3819e499c/edit?invitationId=inv_a657ce4e-5bf9-4314-82a9-debe4aae3ba7).
 
