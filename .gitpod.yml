@@ -1,5 +1,5 @@
 tasks:
-  - name: aws-sam
+  - name: aws-samtemplate.yaml
     init: |
       cd /workspace
       wget https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip
