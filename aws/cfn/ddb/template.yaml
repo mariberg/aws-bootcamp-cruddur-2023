@@ -1,8 +1,8 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: |
-  -DynamoDB table
-  -DynamoDB stream
+  - DynamoDB table
+  - DynamoDB stream
 Parameters:
   PythonRuntime: 
     Type: String
@@ -11,8 +11,8 @@ Parameters:
     Type: String
     Default: 128
   Timeout: 
-        Type: Number
-        Default: 3
+    Type: Number
+    Default: 3
 Resources:
   DynamoDBTable:
     Type: AWS::DynamoDB::Table
@@ -53,7 +53,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: cruddur-messaging-stream
-      PackageType: ZIP
+      PackageType: Zip
       Handler: lambda_handler
       Runtime: !Ref PythonRuntime
       Role: !GetAtt ExecutionRole.Arn
