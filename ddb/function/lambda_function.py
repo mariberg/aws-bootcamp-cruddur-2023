@@ -1,5 +1,5 @@
 import json
-import boto3
+import boto3packagebui
 from boto3.dynamodb.conditions import Key, Attr
 
 dynamodb = boto3.resource(

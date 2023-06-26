@@ -4,11 +4,12 @@ set -e # stop the execution of the script if it
 echo "== deploy"
 
 PACKAGED_TEMPLATE_PATH="/workspace/aws-bootcamp-cruddur-2023/.aws-sam/build/packaged.yaml"
-CONFIG_PATH="/workspace/aws-bootcamp-cruddur-2023/aws/cfn/ddb/config.toml"
+CONFIG_PATH="/workspace/aws-bootcamp-cruddur-2023/ddb/config.toml"
 
 sam deploy \
   --template-file $PACKAGED_TEMPLATE_PATH \
   --config-file $CONFIG_PATH \
   --stack-name "CrdDdb" \
   --tags group=cruddur-ddb \
-  --capabilities "CAPABILITY_IAM"
+  --no-execute-changeset \
+  --capabilities "CAPABILITY_NAMED_IAM"

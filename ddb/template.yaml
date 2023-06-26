@@ -34,7 +34,7 @@ Resources:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
       BillingMode: PROVISIONED
-      DeletionProtectionEnabled: true
+      DeletionProtectionEnabled: false
       GlobalSecondaryIndexes:
         - IndexName: message-group-sk-index
           KeySchema:
