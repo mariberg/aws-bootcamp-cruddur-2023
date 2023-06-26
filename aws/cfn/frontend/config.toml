@@ -1,0 +1,9 @@
+[deploy]
+bucket = 'cloudproject-cfn-artifacts'
+region = 'eu-west-2'
+stack_name = 'CrdFrontend'
+
+[parameters]
+CertificateArn = 'arn:aws:acm:us-east-1:557443467949:certificate/0c611ab5-9721-4645-b58a-b53a93b14607'
+WwwBucketName = 'www.cloudproject.online'
+RootBucketName = 'cloudproject.online'
