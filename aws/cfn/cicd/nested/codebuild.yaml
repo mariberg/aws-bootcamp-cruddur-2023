@@ -11,6 +11,7 @@ Parameters:
     Default: "/cruddur/codebuild/bake-service"
   LogStreamName:
     Type: String
+    Description: "The log stream for Codebuild"
     Default: backend-flask
   CodeBuildImage:
     Type: String
@@ -24,7 +25,6 @@ Parameters:
   BuildSpec:
     Type: String
     Default: 'buildspec.yaml'
-
 Resources:
   CodeBuild:
     # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html

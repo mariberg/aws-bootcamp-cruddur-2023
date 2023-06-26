@@ -43,12 +43,12 @@ Resources:
                 Category: Source
                 Provider: CodeStarSourceConnection
                 Owner: AWS
-                Version: '2'
+                Version: '1'
               OutputArtifacts:
                 - Name: Source
               Configuration:
                 ConnectionArn: !Ref CodeStarConnection
-                FullRepositoryId: !Ref GithubRepo
+                FullRepositoryId: !Ref GitHubRepo
                 BranchName: !Ref GitHubBranch
                 OutputArtifactFormat: "CODE_ZIP"
         - Name: Build
