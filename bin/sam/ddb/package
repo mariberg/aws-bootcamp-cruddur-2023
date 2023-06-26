@@ -1,0 +1,16 @@
+#! /usr/bin/env bash
+set -e # stop the execution of the script if it fails
+
+echo "== package"
+
+TEMPLATE_PATH="/workspace/aws-bootcamp-cruddur-2023/.aws-sam/build/template.yaml"
+OUTPUT_TEMPLATE_PATH="/workspace/aws-bootcamp-cruddur-2023/.aws-sam/build/packaged.yaml"
+CONFIG_PATH="/workspace/aws-bootcamp-cruddur-2023/aws/cfn/ddb/config.toml"
+ARTIFACT_BUCKET ="cloudproject-cfn-artifacts"
+
+sam package \ 
+  --s3-bucket $ARTIFACT_BUCKET \
+  --config-file $CONFIG_PATH \
+  --output-template-file $OUTPUT_TEMPLATE_PATH \
+  --template-file $TEMPLATE_PATH \
+  --s3-prefix "ddb" \

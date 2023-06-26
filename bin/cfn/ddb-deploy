@@ -4,9 +4,18 @@ set -e # stop the execution of the script if it fails
 FUNC_DIR="/workspace/aws-bootcamp-cruddur-2023/aws/lambdas/cruddur-messaging-stream/"
 TEMPLATE_PATH="/workspace/aws-bootcamp-cruddur-2023/aws/cfn/ddb/template.yaml"
 CONFIG_PATH="/workspace/aws-bootcamp-cruddur-2023/aws/cfn/ddb/config.toml"
-#ARTIFACT_BUCKET ="cloudproject-cfn-artifacts"
+ARTIFACT_BUCKET ="cloudproject-cfn-artifacts"
+
+sam validate -t $TEMPLATE_PATH
+
+echo "== build"
+
+# --user-container:
+# user container is fod building the Lambda in a container, it's stil using the runtimes
+# and it's not a custom runtime
 
 sam build \
+--use-container \
 --config-file $CONFIG_PATH \
 --template $TEMPLATE_PATH \
 --build-dir $FUNC_DIR \
@@ -17,18 +26,18 @@ sam build \
 #OUTPUT_TEMPLATE_PATH="/workspace/aws-bootcamp-cruddur-2023/.aws-sam/build/packaged.yaml"
 #CONFIG_PATH="/workspace/aws-bootcamp-cruddur-2023/aws/cfn/ddb/config.toml"
 
-#sam package \ 
-#  --s3-bucket $ARTIFACT_BUCKET \
-#  --config-file $CONFIG_PATH \
-#  --output-template-file $OUTPUT_TEMPLATE_PATH \
-#  --template-file $TEMPLATE_PATH2 \
-#  --s3-prefix "ddb"
+sam package \ 
+  --s3-bucket $ARTIFACT_BUCKET \
+  --config-file $CONFIG_PATH \
+  --output-template-file $OUTPUT_TEMPLATE_PATH \
+  --template-file $TEMPLATE_PATH \
+  --s3-prefix "ddb" \
 
-#PACKAGED_TEMPLATE_PATH="/workspace/aws-bootcamp-cruddur-2023/.aws-sam/build/packaged.yaml"
+PACKAGED_TEMPLATE_PATH="/workspace/aws-bootcamp-cruddur-2023/.aws-sam/build/packaged.yaml"
 
-#sam deploy \
-#  --template-file $PACKAGED_TEMPLATE_PATH \
-#  --config-file $CONFIG_PATH \
-#  --stack-name "CrdDdb" \
-#  --tags group=cruddur-ddb \
-#  --capabilities "CAPABILITY_IAM"
+sam deploy \
+  --template-file $PACKAGED_TEMPLATE_PATH \
+  --config-file $CONFIG_PATH \
+  --stack-name "CrdDdb" \
+  --tags group=cruddur-ddb \
+  --capabilities "CAPABILITY_IAM"
