@@ -52,7 +52,7 @@ Resources:
   ProcessDynamoDBStream:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: cruddur-messaging-stream
+      CodeUri: .
       PackageType: Zip
       Handler: lambda_handler
       Runtime: !Ref PythonRuntime
