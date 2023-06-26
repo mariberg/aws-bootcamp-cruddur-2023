@@ -1,0 +1,11 @@
+[deploy]
+bucket = 'cloudproject-cfn-artifacts'
+region = 'eu-west-2'
+stack_name = 'CrdCicd'
+
+[parameters]
+ServiceStack = 'CrdSrvBackendFlask'
+ClusterStack = 'CrdCluster'
+GitHubBranch = 'prod'
+GitHubRepo = 'aws-bootcamp-cruddur-2023'
+ArtifactBucketName = 'codepipeline-cloudproject-artifacts'
