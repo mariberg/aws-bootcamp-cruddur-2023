@@ -35,7 +35,7 @@ The first version of the project was completed by partially clicking through the
 
 ## Current status
 
-I have completed weeks 0-9 as documented in the below journal. I am currently working towards completing weeks 10-11 and haven't yet written the journal for those weeks.
+I have completed weeks 0-11 as documented in the below journal. I am currently working towards completing week X and haven't yet written the journal for that week.
 
 
 ## Weekly journal
