@@ -58,6 +58,11 @@ Resources:
           FromPort: 5432
           ToPort: 5432
           Description: ALB HTTP
+        - IpProtocol: tcp
+          SourceSecurityGroupId: sg-060049ff24b53ba65
+          FromPort: 5432
+          ToPort: 5432
+          Description: COGNITOPOSTCONF
   DBSubnetGroup: 
     Type: AWS::RDS::DBSubnetGroup
     Properties:
