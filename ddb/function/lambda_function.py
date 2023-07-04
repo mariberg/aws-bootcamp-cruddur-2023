@@ -1,27 +1,26 @@
 import json
-import boto3
+import boto3packagebui
 from boto3.dynamodb.conditions import Key, Attr
 
 dynamodb = boto3.resource(
  'dynamodb',
- region_name='ca-central-1',
- endpoint_url="http://dynamodb.ca-central-1.amazonaws.com"
+ region_name='eu-west-2',
+ endpoint_url="http://dynamodb.eu-west-2.amazonaws.com"
 )
-
 
 def lambda_handler(event, context):
   print('event-data',event)
-  
   eventName=event['Records'][0]['eventName']
   if (eventName == 'REMOVE'):
       print("skip REMOVE event")
       return
+  
   pk = event['Records'][0]['dynamodb']['Keys']['pk']['S']
   sk = event['Records'][0]['dynamodb']['Keys']['sk']['S']
   if pk.startswith('MSG#'):
     group_uuid = pk.replace("MSG#","")
     message = event['Records'][0]['dynamodb']['NewImage']['message']['S']
-    print("GRUP ===>",group_uuid,message)
+    print("GROUP ===>",group_uuid,message)
     
     table_name = 'cruddur-messages'
     index_name = 'message-group-sk-index'

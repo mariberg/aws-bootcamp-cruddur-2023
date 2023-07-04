@@ -1,0 +1,4 @@
+[deploy]
+bucket = 'cloudproject-cfn-artifacts'
+region = 'eu-west-2'
+stack_name = 'CrdNet'

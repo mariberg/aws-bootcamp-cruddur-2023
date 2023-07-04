@@ -1,9 +1,9 @@
 -- this file was manually created
 INSERT INTO public.users (display_name, email, handle, cognito_user_id)
 VALUES
-  ('Marika Bergman', 'marika.bergman@gmail.com', 'Marik' ,'MOCK'),
+  ('Marika Bergman', 'marika.bergman+marika@gmail.com', 'Marik' ,'MOCK'),
 
-   ('tiina', 'marika.bergman+tiina@gmail.com', 'tiina' ,'MOCK'),
+   ('Marika', 'marika.bergman@gmail.com', 'Marika' ,'MOCK'),
 
   ('balboo', 'marika.bergman+balboo@gmail.com', 'balboo', 'MOCK');
 
