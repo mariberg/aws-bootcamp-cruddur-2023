@@ -18,7 +18,7 @@ Parameters:
     Type: String
 
 Resources:
-  CodeBuildBakeImageStack:
+  CodeBuild:
     Type: AWS::CloudFormation::Stack
     Properties: 
       TemplateURL: nested/codebuild.yaml
@@ -65,7 +65,7 @@ Resources:
               OutputArtifacts:
                 - Name: ImageDefinition
               Configuration:
-                ProjectName: !GetAtt CodeBuildBakeImageStack.Outputs.CodeBuildProjectName
+                ProjectName: !GetAtt CodeBuild.Outputs.CodeBuildProjectName
                 BatchEnabled: false
         # https://docs.aws.amazon.com/codepipeline/latest/userguide/action-reference-ECS.html
         - Name: Deploy
@@ -161,5 +161,5 @@ Resources:
                     - ':'
                     - !Ref AWS::AccountId
                     - ':project/'
-                    - !GetAtt CodeBuildBakeImageStack.Outputs.CodeBuildProjectName
+                    - !GetAtt CodeBuild.Outputs.CodeBuildProjectName
 #Outputs:
