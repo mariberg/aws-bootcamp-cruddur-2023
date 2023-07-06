@@ -1,13 +1,13 @@
 from flask import current_app as app
 import os
 from time import strftime
-from flask import got_request_exception
+from flask import got_request_exception, g
 # Rollbar ----
 import rollbar
 import rollbar.contrib.flask
 
 
-def init_rollbar():
+def init_rollbar(app):
     rollbar_access_token = os.getenv('ROLLBAR_ACCESS_TOKEN')
     rollbar.init(
         # access token
