@@ -18,17 +18,18 @@ klass = name.replace('_', ' ').title().replace(' ','')
 
 file_content = f"""
 from lib.db import db
-class {klass}Migration(Migration):
+
+class {klass}Migration:
   def migrate_sql():
-    data = """
-    ALTER TABLE public.users ADD COLUMN bio text;
-    """
+    data = \"\"\"
+    \"\"\"
     return data
+    
   def rollback_sql():
-    data = """
-    ALTER TABLE public.users DROP COLUMN;
-    """
+    data = \"\"\"
+    \"\"\"
     return data
+    
   def migrate():
     db.query_commit({klass}Migration.migrate_sql(),{{
     }})
@@ -36,7 +37,7 @@ class {klass}Migration(Migration):
     db.query_commit({klass}Migration.rollback_sql(),{{
     }})
     
-migration = AddBioColumnMigration
+migration = {klass}Migration
 """
 # remove leading and trailing new lines
 file_content = file_content.lstrip('\n').rstrip('\n')

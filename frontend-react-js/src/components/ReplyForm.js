@@ -29,7 +29,7 @@ export default function ReplyForm(props) {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          activity_uuid: props.replyActivity.uuid,
+          activity_uuid: props.activity.uuid,
           message: message
         }),
       });
