@@ -1,14 +1,14 @@
 import uuid
 from datetime import datetime, timedelta, timezone
 class CreateReply:
-  def run(message, user_handle, activity_uuid):
+  def run(message, cognito_user_id, activity_uuid):
     model = {
       'errors': None,
       'data': None
     }
 
-    if user_handle == None or len(user_handle) < 1:
-      model['errors'] = ['user_handle_blank']
+    if cognito_user_id == None or len(cognito_user_id) < 1:
+      model['errors'] = ['cognito_user_id_blank']
 
     if activity_uuid == None or len(activity_uuid) < 1:
       model['errors'] = ['activity_uuid_blank']
