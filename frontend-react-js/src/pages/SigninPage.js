@@ -2,8 +2,8 @@ import './SigninPage.css';
 import React from "react";
 import {ReactComponent as Logo} from '../components/svg/logo.svg';
 import { Link } from "react-router-dom";
+import FormErrors from 'components/FormErrors';
 
-//import Cookies from 'js-cookie'
 import { Auth } from 'aws-amplify'
 
 export default function SigninPage() {
@@ -31,33 +31,11 @@ export default function SigninPage() {
     return false
   }
   
-  
-
-  /* initial implementation with cookies
-  const onsubmit = async (event) => {
-    event.preventDefault();
-    setErrors('')
-    console.log('onsubmit')
-    if (Cookies.get('user.email') === email && Cookies.get('user.password') === password){
-      Cookies.set('user.logged_in', true)
-      window.location.href = "/"
-    } else {
-      setErrors("Email and password is incorrect or account doesn't exist")
-    }
-    return false
-  }
-  */
-
   const email_onchange = (event) => {
     setEmail(event.target.value);
   }
   const password_onchange = (event) => {
     setPassword(event.target.value);
-  }
-
-  let el_errors;
-  if (errors){
-    el_errors = <div className='errors'>{errors}</div>;
   }
 
   return (
@@ -89,7 +67,7 @@ export default function SigninPage() {
               />
             </div>
           </div>
-          {el_errors}
+          <FormErrors errors={errors} />
           <div className='submit'>
             <Link to="/forgot" className="forgot-link">Forgot Password?</Link>
             <button type='submit'>Sign In</button>
