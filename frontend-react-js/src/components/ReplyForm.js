@@ -4,10 +4,12 @@ import process from 'process';
 import { getAccessToken } from 'lib/CheckAuth';
 
 import ActivityContent  from '../components/ActivityContent';
+import FormErrors from 'components/FormErrors';
 
 export default function ReplyForm(props) {
   const [count, setCount] = React.useState(0);
   const [message, setMessage] = React.useState('');
+  const [errors, setErrors] = React.useState({});
 
   const classes = []
   classes.push('count')
@@ -52,6 +54,8 @@ export default function ReplyForm(props) {
         console.log(res)
       }
     } catch (err) {
+      setErrors({generic_500: "The server encountered an error"
+      })
       console.log(err);
     }
   }
