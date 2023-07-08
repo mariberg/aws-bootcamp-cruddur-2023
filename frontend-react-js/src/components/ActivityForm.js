@@ -25,7 +25,10 @@ export default function ActivityForm(props) {
       message: message,
       ttl: ttl
     }
-    post(url,payload_data,setErrors,function(data){
+    post(url,payload_data, {
+      auth: true,
+      setErrors: setErrors,
+      success: function(data){
       // add activity to the feed
       props.setActivities(current => [data,...current]);
       // reset and close the form
@@ -33,6 +36,7 @@ export default function ActivityForm(props) {
       setMessage('')
       setTtl('7-days')
       props.setPopped(false)
+      }    
     })
     }
 

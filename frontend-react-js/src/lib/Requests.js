@@ -1,8 +1,9 @@
 import {getAccessToken} from 'lib/CheckAuth';
 
-async function request(method,url,payload_data,setErrors,options,success){
-  if (setErrors !== null){
-    setErrors('')
+async function request(method,url,payload_data,options){
+  console.log(options)
+  if (options.hasOwnProperty('setErrors')){
+    options.setErrors('')
   }
   let res
   try {
@@ -10,16 +11,14 @@ async function request(method,url,payload_data,setErrors,options,success){
     const attrs = {
       method: method,
       headers: {
-        'Authorization': 
         'Content-Type': 'application/json'
       }
     }
 
-    if(options.auth === true) {
-    await getAccessToken()
-    const access_token = localStorage.getItem("access_token")
-    attrs.header['Authorization'] = `Bearer ${access_token}`,
-    }
+    if (options.hasOwnProperty('auth') && options.auth === true){
+      await getAccessToken()
+      const access_token = localStorage.getItem("access_token")
+      attrs.headers['Authorization'] = `Bearer ${access_token}`
     }
 
     // if method is not get, we can pass data along
@@ -33,7 +32,7 @@ async function request(method,url,payload_data,setErrors,options,success){
       success(data)
     } else {
       if (setErrors !== null){
-        setErrors(data)
+        options.setErrors(data)
       }
       console.log(res,data)
     }
@@ -41,29 +40,29 @@ async function request(method,url,payload_data,setErrors,options,success){
     console.log('request catch',err)
     if (err instanceof Response) {
         console.log('HTTP error detected:', err.status); // Here you can see the status.
-        if (setErrors !== null){
-          setErrors([`generic_${err.status}`]) // Just an example. Adjust it to your needs.
+        if (options.hasOwnProperty('setErrors')){
+          options.setErrors([`generic_${err.status}`]) // Just an example. Adjust it to your needs.
         }
     } else {
-      if (setErrors !== null){
-        setErrors([`generic_500`]) // For network errors or any other errors
+      if (options.hasOwnProperty('setErrors')){
+        options.setErrors([`generic_500`]) // For network errors or any other errors
       }
     }
   }
 }
 
-export function post(url,payload_data,setErrors,success){
-  request('POST',url,payload_data,setErrors,{},success)
+export function post(url,payload_data,options){
+  request('POST',url,payload_data,options)
 }
 
-export function put(url,payload_data,setErrors,success){
-  request('PUT',url,payload_data,setErrors,{auth:true},success)
+export function put(url,payload_data,options){
+  request('PUT',url,payload_data,options)
 }
 
-export function get(url,setErrors,success){
-  request('GET',url,null,setErrors,{auth:true},success)
+export function get(url,options){
+  request('GET',url,null,options)
 }
 
-export function destroy(url,payload_data,setErrors,success){
-  request('DELETE',url,payload_data,setErrors,{auth:true},success)
+export function destroy(url,payload_data,options){
+  request('DELETE',url,payload_data,options)
 }
