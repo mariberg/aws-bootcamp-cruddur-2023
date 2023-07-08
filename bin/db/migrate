@@ -30,6 +30,7 @@ def set_last_successful_run(value):
   return int(value)
 
 last_successful_run = get_last_successful_run()
+print('=== last_successful_run: ',last_successful_run)
 
 migrations_path = os.path.abspath(os.path.join(current_path, '..', '..','backend-flask','db','migrations'))
 sys.path.append(migrations_path)
@@ -42,6 +43,7 @@ for migration_file in migration_files:
   match = re.match(r'^\d+', filename)
   if match:
     file_time = int(match.group())
+    print('file_time: ',file_time)
     if last_successful_run < file_time:
       mod = importlib.import_module(module_name)
       print('=== running migration: ',module_name)

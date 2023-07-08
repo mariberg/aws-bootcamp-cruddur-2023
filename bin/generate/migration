@@ -9,7 +9,7 @@ else:
   print("pass a filename: eg. ./bin/generate/migration add_bio_column")
   exit(0)
 
-timestamp = str(time.time()).replace(".","")
+timestamp = str(time.time()).replace(".","").zfill(17)
 
 filename = f"{timestamp}_{name}.py"
 
