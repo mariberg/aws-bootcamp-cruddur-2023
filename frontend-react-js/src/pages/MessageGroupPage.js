@@ -18,16 +18,16 @@ export default function MessageGroupPage() {
   const params = useParams();
 
   const loadMessageGroupsData = async () => {
-    const backend_url = `${process.env.REACT_APP_BACKEND_URL}/api/message_groups`
+    const url = `${process.env.REACT_APP_BACKEND_URL}/api/message_groups`
     get(url,null,function(data) {
-      setMessageGroups(resJson)
+      setMessageGroups(data)
     })
   };  
 
   const loadMessageGroupData = async () => {
     const url = `${process.env.REACT_APP_BACKEND_URL}/api/messages/${params.message_group_uuid}`
     get(url,null,function(data) {
-      setMessageGroups(resJson)
+      setMessageGroups(data)
     })
   };  
 

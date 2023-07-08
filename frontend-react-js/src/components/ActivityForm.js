@@ -9,7 +9,7 @@ export default function ActivityForm(props) {
   const [count, setCount] = React.useState(0);
   const [message, setMessage] = React.useState('');
   const [ttl, setTtl] = React.useState('7-days');
-  const [erros, setErrors] = React.useState([]);
+  const [errors, setErrors] = React.useState([]);
 
   const classes = []
   classes.push('count')
