@@ -29,9 +29,9 @@ async function request(method,url,payload_data,options){
     res = await fetch(url,attrs)
     let data = await res.json();
     if (res.status === 200) {
-      success(data)
+      options.success(data)
     } else {
-      if (setErrors !== null){
+      if (options.setErrors !== null){
         options.setErrors(data)
       }
       console.log(res,data)
