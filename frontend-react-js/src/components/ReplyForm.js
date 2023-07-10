@@ -4,12 +4,11 @@ import process from 'process';
 import {post} from 'lib/Requests';
 
 import ActivityContent  from '../components/ActivityContent';
-import FormErrors from 'components/FormErrors';
 
 export default function ReplyForm(props) {
   const [count, setCount] = React.useState(0);
   const [message, setMessage] = React.useState('');
-  const [errors, setErrors] = React.useState({});
+  const [setErrors] = React.useState({});
 
   const classes = []
   classes.push('count')
