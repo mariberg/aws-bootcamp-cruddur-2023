@@ -6,3 +6,4 @@ stack_name = 'CrdSrvBackendFlask'
 [parameters]
 EnvFrontendUrl = 'https://cloudproject.online'
 EnvBackendUrl = 'https://api.cloudproject.online'
+DDBMessageTable = 'CrdDdb-DynamoDBTable-7HH93B7T5YVG'
