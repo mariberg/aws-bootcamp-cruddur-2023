@@ -9,6 +9,6 @@ SELECT
         activities.reply_to_activity_uuid,
         activities.expires_at,
         activities.created_at
-      FROM public.activities
-      LEFT JOIN public.users ON users.uuid = activities.user_uuid
-      ORDER BY activities.created_at DESC
+FROM public.activities
+LEFT JOIN public.users ON users.uuid = activities.user_uuid
+ORDER BY activities.created_at DESC
