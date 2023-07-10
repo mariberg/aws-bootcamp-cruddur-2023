@@ -59,7 +59,6 @@ export default function HomeFeedPage() {
             <div className='title'>Home</div>
           </div>
         <ActivityFeed 
-          title="Home" 
           setReplyActivity={setReplyActivity} 
           setPopped={setPoppedReply} 
           activities={activities} 

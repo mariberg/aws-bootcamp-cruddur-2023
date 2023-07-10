@@ -22,11 +22,11 @@ SELECT
         replies.reposts_count,
         replies.likes_count,
         replies.reply_to_activity_uuid,
-        replies.created_at,
+        replies.created_at
       FROM public.activities replies
       LEFT JOIN public.users reply_users ON reply_users.uuid = replies.user_uuid
       WHERE
-          replies.reply_to_activity_uuid = activities.uuid
+        replies.reply_to_activity_uuid = activities.uuid
       ORDER BY activities.created_at ASC
         ) array_row) as replies
     FROM public.activities
