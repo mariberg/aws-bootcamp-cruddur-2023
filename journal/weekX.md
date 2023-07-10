@@ -52,7 +52,25 @@ Added ``jwt_required function`` into ``cognito_jwt_token.py``. This function can
 
 ## Refactor App.py
 
+We have a lot of code where we have a model and it’s going to return something. That could be refactored by creating a new function. Added this function to App.py:
+
+```
+def return_model(model):
+  if model['errors'] is not None:
+    return model['errors'], 422
+  else:
+    return model['data'], 200
+```
+
+Re-factored all functions to use it.
+
+Created new files in lib-folder for Xray, Honeycomb, Rollbar, CORS and moved all code from App.py related to those to the corresponding folders. Then imported and initialized them in App.py
+
 ## Refactor Flask Routes
+
+All routes were in App.py and it looked quite messy and difficult to navigate.  Added several new files and moved routes from app.py to them:
+
+![route](assets/routes_folders.png)
 
 ## Implement Replies for Posts
 
