@@ -10,7 +10,9 @@ Parts of the application itself were ready when the bootcamp started, but a larg
 
 ## AWS services that were used
 
-The application has been deployed on AWS by utilizing several AWS services. The frontend and backend have both been deployed as **Docker** containers on **ECS Fargate**. 
+The application has been deployed on AWS by utilizing several AWS services. The backend has been deployed as a **Docker** container on **ECS Fargate**.
+
+Frontend has been deployed using **S3** and  **CloudFront**.
 
 **X-Ray** is instrumented to be used as an observability tool. 
 
@@ -35,22 +37,22 @@ The first version of the project was completed by partially clicking through the
 
 ## Current status
 
-I have completed weeks 0-11 as documented in the below journal. I am currently working towards completing week X and haven't yet written the journal for that week.
+The bootcamp has been completed and details documented in the below journal. Currently waiting for grading.
 
 
 ## Weekly journal
 
 I have written a detailed journal for each week of the project. I have added architectural diagrams to several weekly journals in order to clarify the infrastructure that was created during that week. The journal entries contain details of the steps that were completed during the week and information about overcoming possible challenges. Some of the weekly journal entries also contain links to articles I have written about some aspects of that specific week. 
 
-- [ ] [Week 0 - Billing and Architecture](journal/week0.md)
-- [ ] [Week 1 - App Containerization](journal/week1.md)
-- [ ] [Week 2 - Distributed Tracing](journal/week2.md)
-- [ ] [Week 3 - Decentralized Authentication](journal/week3.md)
-- [ ] [Week 4 - Postgres and RDS](journal/week4.md)
-- [ ] [Week 5 - DynamoDB and Serverless Caching](journal/week5.md)
-- [ ] [Week 6 - Deploying Containers](journal/week6.md)
-- [ ] [Week 7 - Solving CORS with a Load Balancer and Custom Domain](journal/week7.md)
-- [ ] [Week 8 - Serverless Image Processing](journal/week8.md)
-- [ ] [Week 9 - CI/CD](journal/week9.md)
-- [ ] [Week 10-11 - CloudFormation](journal/week10-11.md)
-- [ ] [Week X - Cleanup](journal/weekX.md)
+- [x] [Week 0 - Billing and Architecture](journal/week0.md)
+- [x] [Week 1 - App Containerization](journal/week1.md)
+- [x] [Week 2 - Distributed Tracing](journal/week2.md)
+- [x] [Week 3 - Decentralized Authentication](journal/week3.md)
+- [x] [Week 4 - Postgres and RDS](journal/week4.md)
+- [x] [Week 5 - DynamoDB and Serverless Caching](journal/week5.md)
+- [x] [Week 6 - Deploying Containers](journal/week6.md)
+- [x] [Week 7 - Solving CORS with a Load Balancer and Custom Domain](journal/week7.md)
+- [x] [Week 8 - Serverless Image Processing](journal/week8.md)
+- [x] [Week 9 - CI/CD](journal/week9.md)
+- [x] [Week 10-11 - CloudFormation](journal/week10-11.md)
+- [x] [Week X - Cleanup](journal/weekX.md)
