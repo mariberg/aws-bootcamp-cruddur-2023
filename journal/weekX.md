@@ -40,7 +40,7 @@ In the beginning of this week creating new activity was not working as creating 
 
 We wanted to make sure that the CI/CD pipeline works. When a new pull request was created and merged, the pipeline started to progress. Source stage succeeded, but build stage failed due to missing permissions. Once the required permissions were added, the pipeline worked:
 
-![pipeline](assets/pipeline.png)
+![pipeline](assets/pipeline_weekx.png)
 
 &nbsp;
 
