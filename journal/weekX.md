@@ -90,9 +90,19 @@ class ReplayToActivityUuidToStringMigration:
     """
     return data
 ```
-Running ``./bin/db/migrate`` should run all migration files that haven't yet been run based on the ``last_successful_run`` (in this case adding the bio-field). It turned out that this value had not been set correctly so ti didn't work. 
+Running ``./bin/db/migrate`` should run all migration files that haven't yet been run based on the ``last_successful_run`` (in this case adding the bio-field). It turned out that this value had not been set correctly so it didn't work. 
 
-TODO add solution for migration
+Furthermore, I noticed my migration files timestamps are not consistent with same number of digits. The first migration (bio-field) had 17 digits, whereas the new migrations had either 15 or 15 digits. As the script was looking for the biggest number, it never ran the new migration. I fixed this by adding ``.zill(17`` to the code:
+
+```
+timestamp = str(time.time()).replace(".","").zfill(17)
+```
+
+There was also an error in the migrate script, which caused it to run only the first migration. The issue was caused by incorrect value for ``last_successful_run``. The code had to be changed from ``last_successful_run = set_last_successful_run(timestamp)`` to ``last_successful_run = set_last_successful_run(file_time)``. After this fix all migration files were run.
+
+Reply_to_activity_uuid is now type uuid instead of integer:
+
+![reply_to_activity)_uuid](assets/reply_to_activity_uuid.png)
 
 Created a new file ``show.sql`` to display a single activity. 
 
