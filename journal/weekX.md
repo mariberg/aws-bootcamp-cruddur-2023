@@ -1,6 +1,8 @@
 # Week X — Cleanup
 
-Week X was all about implementing all changes that have been made during previous weeks to production, cleaning up the app and getting it to working condition. The frontend application's main functionalities are completed this week, although there are still more minor functionalities that should be completed to make the application fully functional for users. 
+Week X was all about deploying all changes that have been made during previous weeks to production, refactoring code, cleaning up the app and getting it to working condition. The frontend application's main functionalities are completed this week, although there are still more minor functionalities that should be completed to make the application fully functional for users. 
+
+&nbsp;
 
 ## Sync tool for static website hosting
 
@@ -40,6 +42,8 @@ In the beginning of this week creating new activity was not working as creating 
 
 We wanted to make sure that the CI/CD pipeline works. When a new pull request was created and merged, the pipeline started to progress. Source stage succeeded, but build stage failed due to missing permissions. Once the required permissions were added, the pipeline worked:
 
+&nbsp;
+
 ![pipeline](assets/pipeline_weekx.png)
 
 &nbsp;
@@ -49,6 +53,8 @@ We wanted to make sure that the CI/CD pipeline works. When a new pull request wa
 The reason we want to use a decorator is because when we want to clean up all of the functions in different files not to use hardcoded values, we end up doing a lot of manual changes in many places.
 
 Added ``jwt_required function`` into ``cognito_jwt_token.py``. This function can now be imported into other files and used in other functions. This allows us to simplify the way the functions work. There is a default page where they will end up if not authenticated. 
+
+&nbsp;
 
 ## Refactor App.py
 
@@ -66,11 +72,15 @@ Re-factored all functions to use it.
 
 Created new files in lib-folder for Xray, Honeycomb, Rollbar, CORS and moved all code from App.py related to those to the corresponding folders. Then imported and initialized them in App.py
 
+&nbsp;
+
 ## Refactor Flask Routes
 
 All routes were in App.py and it looked quite messy and difficult to navigate.  Added several new files and moved routes from app.py to them:
 
 ![route](assets/routes_folders.png)
+
+&nbsp;
 
 ## Implement Replies for Posts
 
@@ -104,16 +114,19 @@ Reply_to_activity_uuid is now type uuid instead of integer:
 
 ![reply_to_activity)_uuid](assets/reply_to_activity_uuid.png)
 
+Now the difference between original messages and replies in our database is, that original messages don't have any ``reply_to_activity_uuid``, whereare replies have it populated.
+
 Created a new file ``show.sql`` to display a single activity. 
 
-TODO add replies
-
+&nbsp;
 
 ## Improved Error Handling for the app
 
 We wanted our app to display some kind of errors when a user tries to submit and empty form or a form with errors. Added ``FormErrors.js`` and ``FormErrorItem.js``
 
 Started to go through all different forms that we have and import in them the new FormErrors component and post from lib/Requests. After these changes all of the forms will display better error messages to users so that they can understand what is going on.
+
+&nbsp;
 
 ## Refactor Fetch Requests
 
@@ -123,10 +136,63 @@ After updating all  forms with error handling, we also had to update all functio
 
 Updated a lot of files in total. What is in common now is that everything is importing lib/Requests and for this reason the post,put,get requests in individual components have been simplified a lot and code is a lot shorter and easier to understand.
 
+Added to ``Request.js`` ``options``. The idea is that we can have some routes that require authorization and other that don’t, 
+
+Changed the code to a little bit different one in the end to get it work and had to then update all files that use the fetch requests.
+
+&nbsp;
+
 ## 	Activities Show Page
 
-TODO from the beginning of Week X activity show page
+Made changes to ``ActivityContent.css`` so that we can more easily see which fields are clickable while hovering over them. A user name will be underlined when we hover over it and it tells us that we can click it to view their profile. 
+
+Removed Replies from ActivityItem and created a new file Replies.js as it didn’t work as intended. Created another new file ActivityShowPage. We copies a lot of content from Activityfeed and we are not renaming everything so that we can simply use the same css.
+
+Added a new path to app.js:
+
+```sql
+{
+    path: "/@:handle/status/:activity_uuid",
+    element: <ActivityShowPage />
+  },
+```
+
+New route also added to users.py.
+
+Created new file ``ActivityShowItem.js``. Change ActivityShowpage to display ActivityShowItem instead of ActivityItem.
+
+&nbsp;
+
+## Connect to DynamoDB
+
+In terms of the IAM user, we should NOT have used a main user with Admin privileges to update the DynamoDB. If someone managed to get into our container, they could potentially get some kind of access to our user. We created a new ``template.yaml`` and ``config toml`` for machineuser. After the new user was created through CFN,  went to IAM to take the access keys and updated those in the parameter store.
+
+To fix the DynamoDB to use production:
+
+- updated all table ins ``ddb.py`` from hardcoded cruddur-messages to os.getenv("DDB_MESSAGE_TABLE")
+- put the hardcoded dev name ‘cruddur-messages’ on backend-flask.env.erb so that we can use it when running locally. We don’t have any clever way to switch between dev and prod. If we want to use the production database when testing locally, we can simply replace it with the production DB name in the env file
+- updated the service ``config.toml`` with the production DDB name
+- added to service cfn ``template.yaml`` a new parameter for DDB. Default is cruddur-messages, which we can use if we remove the one from ``config.toml``
+  
+Ran ``./bin/cfn/service_deploy`` as we need to update our task definition with the new DDB name. As our task definition and service are on the same CFN template, it means that we will now take the ECS service down as well. This is something that we might not want to do, so it might be better to have the task definition on a separate CFN template. We would normally want to update our service only via the CICD pipeline where we have a suitable rollback etc in place.
+
+&nbsp;
 
 ## More General Cleanup 
 
-## Connect to DynamoDB
+Made changes so that we can go to the home page and each item will have a different colours while we hover it and we can then click it and an individual Crud will open (it would display replies if there are). Something wrong with my implementation as it doesn’t change colour and by clicking I also end up in default (’nothing to see here yet’). 
+
+Another issue we had was that we had to manually refresh the page after writing reply in order to see the new message. This was fixed this by adding ``setReplies`` to ``activityShowPage``. 
+
+After these changes our frontend application was in an acceptable state, although many functionalities such as replies count are not working yet.
+
+Now it was time to move on to make sure that all changes we have made are implemented in production. We ran the database migration scripts now against production, so that the ``bio-field`` is added and ``reply_to_activity_uuid`` type changed from integer to uuid.
+
+Created a pull request to merge main into prod to update the backend via CodePipeline.
+
+To update the frontend, we ran:
+./bin/frontend/static-build
+./bin/frontend/sync
+
+
+
