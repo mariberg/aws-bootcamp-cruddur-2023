@@ -74,10 +74,49 @@ All routes were in App.py and it looked quite messy and difficult to navigate.  
 
 ## Implement Replies for Posts
 
+There was no implementation yet to handle writing replies to activities. When starting to implement this, the first issue we ran into was the fact that ``reply_to_activity_uuid`` had been set up as an integer instead of uuid. In order to change this, we generated a migration file:
+```
+class ReplayToActivityUuidToStringMigration:
+  def migrate_sql():
+    data = """
+    ALTER TABLE activities DROP COLUMN reply_to_activity_uuid;
+    ALTER TABLE activities ADD COLUMN reply_to_activity_uuid uuid;
+    """
+    return data
+  def rollback_sql():
+    data = """
+    ALTER TABLE activities DROP COLUMN reply_to_activity_uuid;
+    ALTER TABLE activities ADD COLUMN reply_to_activity_uuid integer;
+    """
+    return data
+```
+Running ``./bin/db/migrate`` should run all migration files that haven't yet been run based on the ``last_successful_run`` (in this case adding the bio-field). It turned out that this value had not been set correctly so ti didn't work. 
+
+TODO add solution for migration
+
+Created a new file ``show.sql`` to display a single activity. 
+
+TODO add replies
+
+
 ## Improved Error Handling for the app
+
+We wanted our app to display some kind of errors when a user tries to submit and empty form or a form with errors. Added ``FormErrors.js`` and ``FormErrorItem.js``
+
+Started to go through all different forms that we have and import in them the new FormErrors component and post from lib/Requests. After these changes all of the forms will display better error messages to users so that they can understand what is going on.
+
+## Refactor Fetch Requests
+
+Created new file Requests.js where we put all different fetch requests (put, post, get).
+
+After updating all  forms with error handling, we also had to update all functions where fetch is being used.  We looked at all the different fetch functions we have and we ignore the once that are not calling our backend (presigned URL for example).
+
+Updated a lot of files in total. What is in common now is that everything is importing lib/Requests and for this reason the post,put,get requests in individual components have been simplified a lot and code is a lot shorter and easier to understand.
 
 ## 	Activities Show Page
 
+TODO from the beginning of Week X activity show page
+
 ## More General Cleanup 
 
-## 
+## Connect to DynamoDB
