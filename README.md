@@ -2,6 +2,10 @@
 
 This application has been created while taking part in the free AWS Cloud project bootcamp by Andrew Brown / ExamPro. The starting code base [ExamPro AWS Cloud Project Bootcamp](https://github.com/ExamProCo/aws-bootcamp-cruddur-2023) has been used as a template to initially create this project. The bootcamp ran over four months during which new code was regularly committed to this repository accompanied by journal entries describing the weekly progress.
 
+![Cruddur Graphic](_docs/assets/cruddur-banner.jpg)
+
+![Cruddur Screenshot](_docs/assets/cruddur-screenshot.png)
+
 ## Structure of the project
 
 The project consists of a social media application called 'Cruddur'. The users are able to message each other and they have a feed that displays messages that are relevant to them. The frontend of the project has been created with ReactJS (JavaScript). The backend has been created with Flask (Python). The project also includes a large amount of bash scripts. Additionally, Ruby has been used for a few small parts of the project.
@@ -37,7 +41,7 @@ The first version of the project was completed by partially clicking through the
 
 ## Current status
 
-The bootcamp has been completed and details documented in the below journal. Currently waiting for grading.
+The bootcamp has been completed and my weekly progress is documented in the below journal. Currently waiting for grading.
 
 
 ## Weekly journal
