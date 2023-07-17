@@ -8,9 +8,9 @@ This application has been created while taking part in the free AWS Cloud projec
 
 ## Structure of the project
 
-The project consists of a social media application called 'Cruddur'. The users are able to message each other and they have a feed that displays messages that are relevant to them. The frontend of the project has been created with ReactJS (JavaScript). The backend has been created with Flask (Python). The project also includes a large amount of bash scripts. Additionally, Ruby has been used for a few small parts of the project.
+The project consists of a social media application called 'Cruddur'. The users are able to message each other and they have a feed that displays messages that are relevant to them. The frontend of the project has been created with ReactJS (JavaScript). The backend has been created with Flask (Python). The project also includes a large number of bash scripts. Additionally, Ruby has been used for a few small parts of the project.
 
-Parts of the application itself were ready when the bootcamp started, but a large part of it was completed during the bootcamp. Additionally existing parts were modified as needed while progressing through the bootcamp. However, the main focus of the bootcamp was to deploy the application on AWS.
+Parts of the application itself were ready when the bootcamp started, but a large part of it was completed during the bootcamp. Additionally, existing parts were modified as needed while progressing through the bootcamp. However, the main focus of the bootcamp was to deploy the application on AWS.
 
 ## AWS services that were used
 
@@ -24,13 +24,13 @@ Frontend has been deployed using **S3** and  **CloudFront**.
 
 **RDS Postgres** is used as a database for the user data. **DynamoDB** is used as a single table design for the messages.
 
-A hosted zone on **Route 53** is linked to the custom domain cloudproject.online. **Application load balancer** is used to forwards requests to the frontend and backend containers.  
+A hosted zone on **Route 53** is linked to the custom domain cloudproject.online. **Application load balancer** is used to forward requests to the frontend and backend containers.  
 
-Serverless image processing is implemented by utilizing **API Gateway**, two **Lambda** functions, **presigned URL**, **S3** and **CloudFront**.
+Serverless image processing is implemented using **API Gateway**, two **Lambda** functions, **presigned URL**, **S3** and **CloudFront**.
 
 **CodePipeline**, **CodeBuild** and **CodeDeploy** are used for CI/CD.
 
-The first version of the project was completed by partially clicking through the AWS console and utulizing AWS CLI. During weeks 10-11 the infrastructure was re-created using **CloudFormation**. Additionally to CloudFormation, the serverless image processing (week 8) was completed with **AWS CDK**.  
+The first version of the project was completed by partially clicking through the AWS console and utilising AWS CLI. During weeks 10-11, the infrastructure was re-created using **CloudFormation**. Additionally to CloudFormation, the serverless image processing (week 8) was completed with **AWS CDK**.  
 
 
 ## Third-party tools that were used
@@ -60,3 +60,9 @@ I have written a detailed journal for each week of the project. I have added arc
 - [x] [Week 9 - CI/CD](journal/week9.md)
 - [x] [Week 10-11 - CloudFormation](journal/week10-11.md)
 - [x] [Week X - Cleanup](journal/weekX.md)
+
+## Articles
+
+In addition to the weekly journal, I have also written two articles about the bootcamp. In the first article about [DynamoDB week](https://blog.marikabergman.com/aws-cloud-project-bootcamp-dynamodb) I go through the main points regarding DynamoDB data modelling for our application. The main topics of the article are access patterns and the reason we choose to use a global secondary index. 
+
+My second article about the [inftrasturure as code](https://blog.marikabergman.com/aws-cloud-project-bootcamp-iac) part of our project goes through the tools that were used to provision our infrastructure. I have explained in the article the current status of the infrastructure provisioning and further steps that would be needed to fully automate it. 
