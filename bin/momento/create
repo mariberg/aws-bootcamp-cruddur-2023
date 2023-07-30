@@ -3,11 +3,17 @@
 import os
 import sys
 
-current_path = os.path.dirname(os.path.abspath(__file__))
-parent_path = os.path.abspath(os.path.join(current_path, '..', '..','backend-flask/lib/momento'))
-print('parent path:', parent_path)
-from momento import create
-print('functin:', create)
+cache_name = 'likes'
 
-create()
-END
+current_path = os.path.dirname(os.path.abspath(__file__))
+momento_path = os.path.abspath(os.path.join(current_path, '..', '..','backend-flask'))
+print('momento path:', momento_path)
+
+sys.path.insert(0, momento_path)  # Add 'momento_path' to the sys.path
+
+from lib.momentoCache import create_client, create_cache, set
+
+with create_client() as client:
+    create_cache(client, cache_name)
+    set(client, cache_name, uuid, "0")
+

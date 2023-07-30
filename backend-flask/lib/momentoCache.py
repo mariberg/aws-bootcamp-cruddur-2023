@@ -1,7 +1,7 @@
 from datetime import timedelta
 
-#from momento import CacheClient, Configurations, CredentialProvider
-#from momento.responses import CacheGet, CacheSet, CreateCache, ListCaches, CacheIncrement
+from momento import CacheClient, Configurations, CredentialProvider
+from momento.responses import CacheGet, CacheSet, CreateCache, ListCaches, CacheIncrement
 
 import os
 
@@ -76,6 +76,6 @@ def incr(client, cache_name, key, value:int = 1):
         print("Unreachable")
         
     
-with create_client() as client:
-    create_cache(client, cache_name)
-    set(client, cache_name, "like", "0")
+#with create_client() as client:
+#    create_cache(client, cache_name)
+#    set(client, cache_name, "like", "0")
