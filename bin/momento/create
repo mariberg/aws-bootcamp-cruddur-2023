@@ -11,9 +11,8 @@ print('momento path:', momento_path)
 
 sys.path.insert(0, momento_path)  # Add 'momento_path' to the sys.path
 
-from lib.momentoCache import create_client, create_cache, set
+from lib.momentoCache import create_client, create_cache, setLikes
 
 with create_client() as client:
     create_cache(client, cache_name)
-    set(client, cache_name, uuid, "0")
 

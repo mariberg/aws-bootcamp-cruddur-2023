@@ -7,12 +7,14 @@ import os
 
 cache_name = "likes"
 
-momento_auth_token = os.getenv("MOMENTO_AUTH_TOKEN")
+#auth_token = os.getenv("MOMENTO_AUTH_TOKEN")
+#ttl_seconds = os.getenv("MOMENT_TTL_SECONDS")
 
 # A function that creates the CacheClient connection and returns it.
 # It gets values from environment variables, but you could get them from
 # a programatic encrypted data manager like AWS Secrets Manager.
 def create_client():
+    
   momento_auth_token = CredentialProvider.from_environment_variable('MOMENTO_AUTH_TOKEN')
   ttl  = timedelta(seconds=int(os.getenv('MOMENTO_TTL_SECONDS', '600')))
   config = {
@@ -45,7 +47,7 @@ def list_caches(client) -> None:
             print("Unreachable")
     print("")
 
-def set(client, cache_name, key, value, ttl=None):
+def setLikes(client, cache_name, key, value, ttl=None):
   resp = client.set(cache_name, key, value, ttl)
   match resp:
     case CacheSet.Success():

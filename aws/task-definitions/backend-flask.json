@@ -66,7 +66,9 @@
           {"name": "AWS_SECRET_ACCESS_KEY", "valueFrom": "arn:aws:ssm:eu-west-2:557443467949:parameter/cruddur/backend-flask/AWS_SECRET_ACCESS_KEY"},
           {"name": "CONNECTION_URL"       , "valueFrom": "arn:aws:ssm:eu-west-2:557443467949:parameter/cruddur/backend-flask/CONNECTION_URL" },
           {"name": "ROLLBAR_ACCESS_TOKEN" , "valueFrom": "arn:aws:ssm:eu-west-2:557443467949:parameter/cruddur/backend-flask/ROLLBAR_ACCESS_TOKEN" },
-          {"name": "OTEL_EXPORTER_OTLP_HEADERS" , "valueFrom": "arn:aws:ssm:eu-west-2:557443467949:parameter/cruddur/backend-flask/OTEL_EXPORTER_OTLP_HEADERS" }
+          {"name": "OTEL_EXPORTER_OTLP_HEADERS" , "valueFrom": "arn:aws:ssm:eu-west-2:557443467949:parameter/cruddur/backend-flask/OTEL_EXPORTER_OTLP_HEADERS" },
+          {"name": "MOMENTO_TTL_SECONDS", "valueFrom": "arn:aws:ssm:eu-west-2:557443467949:parameter/cruddur/backend-flask/MOMENTO_TTL_SECONDS" },
+          {"name": "MOMENTO_AUTH_TOKEN", "valueFrom": "arn:aws:ssm:eu-west-2:557443467949:parameter/cruddur/backend-flask/MOMENTO_AUTH_TOKEN" }
         ]
       }
     ]

@@ -2,6 +2,7 @@ import uuid
 from datetime import datetime, timedelta, timezone
 
 from lib.db import db
+from lib.momentoCache import create_client, setLikes
 
 class CreateActivity:
   def run(message, cognito_user_id, ttl):
@@ -57,7 +58,11 @@ class CreateActivity:
       'message': message, 
       'expires_at': expires_at
     })
-    return uuid
+    with create_client() as client:
+      setLikes(client, 'likes', uuid, '0')
+    return uuid #this uuid is needed to be added to cache with likes '0'
+    
+  
   def query_object_activity(uuid):
     sql = db.template('activities', 'object')
     return db.query_object_json(sql,{ 
