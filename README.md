@@ -14,11 +14,11 @@ Parts of the application itself were ready when the bootcamp started, but a larg
 
 # Architecture
 
-The architecture of the project is described in this diagram:
+The architecture of the project is described in the below diagram:
 
-![architecture](assets/final_diagram.png)
+![architecture](journal/assets/final_diagram.png)
 
-Each part of the diagram is explained in detail in the journal. Most parts are described in the week 10 journal and few parts during previous weeks journals (DynamoDB - week 5 and Serverless Image processing week 8).
+Each part of the diagram is explained in detail in the journal. Most parts are described in the week 10-11 journal, apart from 'Serverless Image processing' which is explained in the week 8 journal, due to it not yet being incorporated into CloudFormation.
 
 ## AWS services that were used
 
