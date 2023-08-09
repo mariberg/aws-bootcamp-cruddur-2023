@@ -12,6 +12,14 @@ The project consists of a social media application called 'Cruddur'. The users a
 
 Parts of the application itself were ready when the bootcamp started, but a large part of it was completed during the bootcamp. Additionally, existing parts were modified as needed while progressing through the bootcamp. However, the main focus of the bootcamp was to deploy the application on AWS.
 
+# Architecture
+
+The architecture of the project is described in this diagram:
+
+![architecture](assets/final_diagram.png)
+
+Each part of the diagram is explained in detail in the journal. Most parts are described in the week 10 journal and few parts during previous weeks journals (DynamoDB - week 5 and Serverless Image processing week 8).
+
 ## AWS services that were used
 
 The application has been deployed on AWS by utilizing several AWS services. The backend has been deployed as a **Docker** container on **ECS Fargate**.
