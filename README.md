@@ -47,10 +47,6 @@ The first version of the project was completed by partially clicking through the
 
 **Rollbar** was configured to be used for monitoring and bug-tracking.
 
-## Current status
-
-The bootcamp has been completed and my weekly progress is documented in the below journal. Currently waiting for grading.
-
 
 ## Weekly journal
 
@@ -74,3 +70,9 @@ I have written a detailed journal for each week of the project. I have added arc
 In addition to the weekly journal, I have also written two articles about the bootcamp. In the first article about [DynamoDB week](https://blog.marikabergman.com/aws-cloud-project-bootcamp-dynamodb) I go through the main points regarding DynamoDB data modelling for our application. The main topics of the article are access patterns and the reason we choose to use a global secondary index. 
 
 My second article about the [infrastructure as code](https://blog.marikabergman.com/aws-cloud-project-bootcamp-iac) part of our project goes through the tools that were used to provision our infrastructure. I have explained in the article the current status of the infrastructure provisioning and further steps that would be needed to fully automate it. 
+
+## Grading
+
+The bootcamp has been completed and I have received grading from ExampPro. My application successfully passed the automated validator with a 100% score, and I also received positive feedback regarding the quality of my documentation.
+
+![Certificate](journal/assets/certificate.PNG)
